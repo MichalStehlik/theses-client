@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, Switch} from "react-router-dom";
 import List from "./List";
-//import Create from "./Create";
+import Create from "./Create";
 import Detail from "./Detail";
 import NotFound from "../../NotFound";
 import LayoutRoute from "../../layouts/LayoutRoute";
@@ -12,6 +12,7 @@ const Sets = props => {
     return (
         <Switch>
             <Route exact path="/admin/sets" component={List} />
+            <Route exact path="/admin/sets/create" component={Create} />
             <Route path="/admin/sets/:id" component={Detail} />
             <LayoutRoute component={NotFound} layout={MessageLayout} backgroundColor={theme.colors.infoBackground} color={theme.colors.infoForeground} />   
         </Switch>
@@ -19,7 +20,3 @@ const Sets = props => {
 }
 
 export default Sets;
-
-/*
-<Route exact path="/admin/sets/create" component={Create} />
-*/

@@ -67,7 +67,7 @@ const Edit = props => {
             <Form>
                 {(failed !== false) ? <Alert text={"Uložení skupiny se nepodařilo. (" + failed + ")"}  variant="error" /> : ""}
                 {(ok !== false) ? <Alert text={"Uložení skupiny se podařilo."}  variant="success" /> : ""}
-                <FormTextInput name="text" label="Text" placeholder="MP 2021/22" />
+                <FormTextInput name="text" label="Text" placeholder="MP obor" />
                 <FormTextInput name="color" label="Barva" type="color" />
                 <div>
                     <Button type="submit" variant="primary" disabled={!(isValid) || isSubmitting}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>

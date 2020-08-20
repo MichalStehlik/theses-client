@@ -6,12 +6,12 @@ import {ReactComponent as WorkIcon} from "../assets/icons/graduate.svg";
 import {ReactComponent as HomeIcon} from "../assets/icons/home.svg";
 import {ReactComponent as IdeaIcon} from "../assets/icons/lightbulb.svg";
 import {ReactComponent as ChartIcon} from "../assets/icons/pie-chart.svg";
-import {ReactComponent as FolderIcon} from "../assets/icons/folder.svg";
 import {ReactComponent as UserIcon} from "../assets/icons/user.svg";
 import {ReactComponent as TerminalIcon} from "../assets/icons/terminal.svg";
 import {ReactComponent as HammerIcon} from "../assets/icons/hammer.svg";
 
 import {devices} from "../configuration/layout";
+import {ADMIN_ROLE} from "../configuration/constants";
 
 const StyledMainMenu = styled.nav`
     display: flex;
@@ -77,7 +77,7 @@ const MainMenuItem = props => {
 }
 
 const MainMenu = props => {
-    const [{accessToken}] = useAppContext();
+    const [{accessToken, profile}] = useAppContext();
     return (
     <StyledMainMenu>
         <MainMenuItem to="/" exact icon={<HomeIcon />} text="Úvodní stránka" />
@@ -85,7 +85,7 @@ const MainMenu = props => {
         <MainMenuItem to="/works" icon={<WorkIcon />} text="Práce" />
         <MainMenuItem to="/overviews" icon={<ChartIcon />} text="Souhrny" />
         <MainMenuItem to="/users" icon={<UserIcon />} text="Uživatelé" />
-        {accessToken !== null ? <MainMenuItem to="/admin" icon={<HammerIcon />} text="Administrace" /> : ""}
+        {accessToken && (profile[ADMIN_ROLE] === 1) ? <MainMenuItem to="/admin" icon={<HammerIcon />} text="Administrace" /> : ""}
         <MainMenuItem to="/console" icon={<TerminalIcon />} text="Konzola API" />
         <MainMenuItem to="/test" icon={<HammerIcon />} text="Pokusy" />
     </StyledMainMenu>

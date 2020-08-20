@@ -78,6 +78,13 @@ justify-self: center;
 align-self: start;
 `;
 
+const PaginatorPage = styled.span`
+display: inline-block;
+padding: 5px;
+cursor: pointer;
+`;
+
+
 export const TextColumnFilter = ({ column: { filterValue, preFilteredRows, setFilter }}) => {
   return (
     <Input style={{display: "inline-block", width: "100%", boxSizing: "border-box"}} value={filterValue || ''} onChange={e => { setFilter(e.target.value || undefined) }} placeholder={`Zadejte text`}
@@ -201,7 +208,7 @@ export const DataTable = ({columns, data, fetchData, isLoading, error, totalPage
         <ResetMiniButton onClick={() => setAllFilters([])} title="Zobrazit vše" />     
       </PaginatorNavigation>
       <PaginatorPages>
-      {[...Array(pageCount).keys()].map((num)=>(<span className="paginator-page" key={num} onClick={()=>{gotoPage(num)}}>{num + 1}</span>))}
+      {[...Array(pageCount).keys()].map((num)=>(<PaginatorPage key={num} onClick={()=>{gotoPage(num)}}>{num + 1}</PaginatorPage>))}
       </PaginatorPages>
       <PaginatorSize>
         <Select value={pageSize} onChange={e => {

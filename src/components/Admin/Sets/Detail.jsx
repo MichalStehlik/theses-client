@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { CardContainer, Card, ActionLink, Alert, Loader, PageTitle } from "../../general";
 import {useAppContext, SET_TITLE} from "../../../providers/ApplicationProvider";
 import axios from "axios";
-//import Edit from "./Edit";
-//import Display from "./Display";
+import Edit from "./Edit";
+import Display from "./Display";
 
 export const Detail = props => {
     const { id } = useParams();
@@ -16,7 +16,7 @@ export const Detail = props => {
     const fetchData = useCallback(() => {
         setIsLoading(true);
         setError(false);
-        axios.get(process.env.REACT_APP_API_URL + "/targets/" + id,{
+        axios.get(process.env.REACT_APP_API_URL + "/sets/" + id,{
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json"
@@ -56,7 +56,7 @@ export const Detail = props => {
             <PageTitle>{response.name}</PageTitle> 
             <CardContainer>
                 <Card>
-               
+                {editing ? <Edit data={response} id={id} switchEditMode={setEditing} fetchData={fetchData} /> : <Display data={response} id={id} switchEditMode={setEditing} />}
                 </Card>
             </CardContainer>
             </>
@@ -68,7 +68,3 @@ export const Detail = props => {
 };
 
 export default Detail;
-
-/*
- {editing ? <Edit data={response} id={id} switchEditMode={setEditing} fetchData={fetchData} /> : <Display data={response} id={id} switchEditMode={setEditing} />}
-*/

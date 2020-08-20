@@ -11,7 +11,7 @@ const TargetsShowcase = props => {
   {
     return props.targets.map((item, index) => (
       <Badge key={index} style={{cursor: "default"}} background={"#" + item.color.name.substring(2,8)} color={invertColor("#" + item.color.name.substring(2,8))}>{item.text}</Badge>
-    ));;
+    ));
   }
   else return "";
 }

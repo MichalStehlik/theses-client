@@ -21,12 +21,12 @@ const Edit = props => {
                 firstname: props.data.firstName ? props.data.firstName : "",
                 middlename: props.data.middleName ? props.data.middleName : "",
                 lastname: props.data.lastName ? props.data.lastName : "",
-                gender: props.data.gender ? props.data.gender : 0,
+                gender: props.data.gender !== undefined ? props.data.gender : 0,
                 email: props.data.email ? props.data.email : "",
                 canbeauthor: props.data.canBeAuthor ? props.data.canBeAuthor : false,
                 canbeevaluator: props.data.canBeEvaluator ? props.data.canBeEvaluator : false,
-                lockedicon: props.data.canBeEvaluator ? props.data.canBeEvaluator : false,
-                lockedchange: props.data.canBeEvaluator ? props.data.canBeEvaluator : false
+                lockedicon: props.data.lockedIcon ? props.data.lockedIcon : false,
+                lockedchange: props.data.lockedChange ? props.data.lockedChange : false
             }}
             validate={values=>{
                 let errors = {};
@@ -44,7 +44,7 @@ const Edit = props => {
                     FirstName: values.firstname,
                     MiddleName: values.middlename,
                     LastName: values.lastname,
-                    Gender: values.gender,
+                    Gender: Number(values.gender),
                     Email: values.email,
                     CanBeAuthor: values.canbeauthor,
                     CanBeEvaluator: values.canbeevaluator,

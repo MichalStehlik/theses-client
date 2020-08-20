@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Formik } from 'formik';
 import { Alert, Button, Form, ActionLink, Card, CardContainer, FormTextInput } from "../../general";
 import {useHistory} from "react-router-dom";
-import {useAppContext, SET_TITLE} from "../../../providers/ApplicationProvider";
+import {useAppContext, SET_TITLE, ADD_MESSAGE} from "../../../providers/ApplicationProvider";
 import Axios from 'axios';
 
 const Create = props => {
@@ -36,7 +36,6 @@ const Create = props => {
                         }}
                         onSubmit={async (values, { setSubmitting }) => {
                             setSubmitting(true);
-                            console.log(values);
                             Axios.post(process.env.REACT_APP_API_URL + "/targets", {
                                 Text: values.text,
                                 Color: values.color
@@ -49,6 +48,7 @@ const Create = props => {
                             .then(response => {
                                 setOk(true);
                                 setFailed(false);
+                                dispatch({type: ADD_MESSAGE, text: "Cílová skupina byla vytvořena.", variant: "success", dismissible: true, expiration: 3});
                                 history.push("/admin/targets");
                             })
                             .catch(error => {

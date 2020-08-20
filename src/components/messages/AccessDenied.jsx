@@ -13,7 +13,7 @@ const AccessDenied = props => {
                 <BlockedIcon fill={theme.colors.errorForeground} stroke={theme.colors.errorForeground} width="80" height="80" />
             </Container>
             <Paragraph>K přístupu k této činnosti Vaše práva nestačí.</Paragraph>
-            <Button variant="light" outline onClick={() => {userManager.signinRedirect()}}>Přihlásit</Button>
+            <Button variant="light" outline onClick={() => {userManager.signoutRedirect()}}>Odhlásit</Button>
         </Message>
     );
 };
