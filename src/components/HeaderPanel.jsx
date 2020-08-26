@@ -14,7 +14,7 @@ display: flex;
 flex-direction: row;
 justify-content: space-between;
 align-items: stretch;
-background-color: #99D834;
+background-color: ${props => props.theme.colors.menuBackground};
 `;
 
 const HeaderLink = styled(NavigationLink)`

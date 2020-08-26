@@ -40,11 +40,14 @@ const GlobalStyle = createGlobalStyle`
     font-family: ${props => props.theme.fonts.heading}, sans-serif;
   }
 `;
+/* colors
+rgb(153, 216, 52)
 
+*/
 export const mainTheme = {
   mode: "light",
   colors: {
-    menuBackground: "#99D834",
+    menuBackground: "#00A956",
     menuForeground: "white",
     desktopBackground: "#eee",
     desktopForeground: "#333",
@@ -52,8 +55,8 @@ export const mainTheme = {
     cardForeground: "#111",
     logoBackground: "black",
     logoForeground: "white",
-    logoAccent: "#99D834",
-    successBackground: "rgb(153, 216, 52)",
+    logoAccent: "#00A956",
+    successBackground: "#00A956",
     successForeground: "rgb(255, 255, 255)",
     darkSuccessBackground: "rgb(100,150,35)",
     darkSuccessForeground: "rgb(255, 255, 255)",

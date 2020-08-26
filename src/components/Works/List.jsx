@@ -42,7 +42,7 @@ const List = props => {
         {Header: "Rok", accessor: "year"},
         {Header: "Sada", accessor: "setName", disableSortBy: true, Filter: (column) => {return ListColumnFilter(column, setsData)}},
         {Header: "Stav", accessor: "state", Cell: data => (WorkStates[data.cell.value]), Filter: (column) => {return ListColumnFilter(column, WorkStates)}},
-        {Header: "Akce", /*Cell: (data)=>(<Link to={"/works/" + data.row.original.id}>Detail</Link>)*/}
+        {Header: "Akce", Cell: (data)=>(<Link to={"/works/" + data.row.original.id}>Detail</Link>)}
     ],[setsData]);  
 
     const fetchData = useCallback(({page, size, sort, filters})=>{
@@ -65,7 +65,7 @@ const List = props => {
                 case "userId": parameters.push("userId=" + f.value); break;
                 case "authorFirstName": parameters.push("firstname=" + f.value); break;
                 case "authorLastName": parameters.push("lastname=" + f.value); break;
-                case "set": parameters.push("setId=" + f.value); break;
+                case "setName": parameters.push("setId=" + f.value); break;
                 case "state": parameters.push("state=" + f.value); break;
                 case "year": parameters.push("year=" + f.value); break;
                 case "className": parameters.push("classname=" + f.value); break;

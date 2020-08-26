@@ -56,7 +56,7 @@ export const Create = props => {
                 .then(response => {
                     setOk(true);
                     setFailed(false);
-                    history.push("/ideas");
+                    history.push("/ideas/" + response.data.id + "/onBoarding/1");
                 })
                 .catch(error => {
                     if (error.response)

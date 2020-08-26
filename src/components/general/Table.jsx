@@ -14,12 +14,12 @@ overflow-y: hidden;
 
 export const Table = styled.table`
 ${props => props.width ? "width: {props.width};" : ""}
-background-color: white;
+background-color: #F8F8FA;
 border-collapse: collapse;
 margin: 5px;
 & td, & th {
   border: 1px solid #ddd;
-  padding: 5px;
+  padding: 8px;
 }
 & thead {
   border-bottom: 2px solid #444;
@@ -30,8 +30,8 @@ export const TableHeader = styled.thead`
 `;
 
 export const TableBody = styled.tbody`
-${props => props.striped ? "& tr:nth-child(odd) {background: #eee;}" : ""}
-${props => props.hover ? "& tr:hover {background-color: #99D834;}" : ""}
+${props => props.striped ? "& tr:nth-child(odd) {background: #FBFBFC;}" : ""}
+${props => props.hover ? "& tr:hover {background-color: #C2CAD1;}" : ""}
 `;
 
 export const TableFooter = styled.tfoot`

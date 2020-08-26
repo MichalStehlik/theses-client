@@ -85,7 +85,7 @@ const MainMenu = props => {
         <MainMenuItem to="/works" icon={<WorkIcon />} text="Práce" />
         <MainMenuItem to="/overviews" icon={<ChartIcon />} text="Souhrny" />
         <MainMenuItem to="/users" icon={<UserIcon />} text="Uživatelé" />
-        {accessToken && (profile[ADMIN_ROLE] === 1) ? <MainMenuItem to="/admin" icon={<HammerIcon />} text="Administrace" /> : ""}
+        {accessToken && (profile[ADMIN_ROLE] === "1") ? <MainMenuItem to="/admin" icon={<HammerIcon />} text="Administrace" /> : ""}
         <MainMenuItem to="/console" icon={<TerminalIcon />} text="Konzola API" />
         <MainMenuItem to="/test" icon={<HammerIcon />} text="Pokusy" />
     </StyledMainMenu>
