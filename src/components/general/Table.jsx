@@ -14,14 +14,14 @@ overflow-y: hidden;
 
 export const Table = styled.table`
 ${props => props.width ? "width: {props.width};" : ""}
-background-color: #F8F8FA;
 border-collapse: collapse;
+box-sizing: margin-box;
 margin: 5px;
 & td, & th {
   border: 1px solid #ddd;
   padding: 8px;
 }
-& thead {
+& thead, & tbody {
   border-bottom: 2px solid #444;
 }
 `;

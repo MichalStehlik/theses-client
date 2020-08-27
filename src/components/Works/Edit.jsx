@@ -24,7 +24,7 @@ export const Edit = props => {
         .then(response => {
             setSets(response.data.data);
         })
-    });
+    },[accessToken]);
     const fetchAuthorsData = useCallback(() => {
         axios.get(process.env.REACT_APP_API_URL + "/users?author=true",{
             headers: {
@@ -35,7 +35,7 @@ export const Edit = props => {
         .then(response => {
             setAuthors(response.data.data);
         })
-    });
+    },[accessToken]);
     const fetchEvaluatorsData = useCallback(() => {
         axios.get(process.env.REACT_APP_API_URL + "/users?evaluator=true",{
             headers: {
@@ -46,7 +46,7 @@ export const Edit = props => {
         .then(response => {
             setEvaluators(response.data.data);
         })
-    });
+    },[accessToken]);
     useEffect(()=>{ 
         setFailed(false);
         setOk(false);

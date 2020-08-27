@@ -1,9 +1,9 @@
 import React from 'react';
 import {useAppContext} from "../../providers/ApplicationProvider";
-import {Button, Card, CardContainer, CardHeader, CardBody, CardFooter, ActionLink, Subheading, CardTypeValueList, CardTypeValueItem} from "../general";
+import {Button, Card, CardContainer, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem} from "../general";
 
 const Profile = props => {
-    const [{accessToken, idToken, userManager, profile, profileIcon, profileIconType}] = useAppContext();
+    const [{accessToken, userManager, profile, profileIcon, profileIconType}] = useAppContext();
     if (accessToken)
     {
         return (

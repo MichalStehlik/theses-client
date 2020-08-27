@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useAppContext, ADD_MESSAGE} from "../../providers/ApplicationProvider";
-import {Modal, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem, Button, CardFooter, Paragraph, ButtonBlock, useFetch } from "../general";
+import {Modal, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem, Button, CardFooter, Paragraph, ButtonBlock } from "../general";
 import {DateTime, LoadedUser} from "../common";
 import {useHistory} from "react-router-dom";
 import {ADMIN_ROLE, EVALUATOR_ROLE} from "../../configuration/constants";

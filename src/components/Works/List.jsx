@@ -1,6 +1,6 @@
 import React, {useState, useMemo, useCallback, useEffect} from 'react';
 import {Link} from "react-router-dom";
-import {DataTable, BoolColumnFilter, ListColumnFilter, ActionLink} from "../general";
+import {DataTable, ListColumnFilter} from "../general";
 import {DateTime} from "../common";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import axios from "axios";

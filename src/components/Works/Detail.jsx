@@ -7,12 +7,15 @@ import {ADMIN_ROLE} from "../../configuration/constants";
 import Edit from "./Edit";
 import Display from "./Display";
 import Goals from "./Goals";
-//import Outlines from "./Outlines";
+import Outlines from "./Outlines";
+import Costs from "./Costs";
+import EditCosts from "./EditCosts";
 
 export const Detail = props => {
     const { id } = useParams();
     const [{accessToken, profile}, dispatch] = useAppContext();
     const [editing, setEditing] = useState(false);
+    const [editingCosts, setEditingCosts] = useState(false);
     const [response, setResponse] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -69,15 +72,14 @@ export const Detail = props => {
             </Card>
             <Card>
                 <CardHeader><Subheading>Osnova</Subheading></CardHeader>
-                {/* <Outlines id={id} owner={response ? response.userId :  false} />*/}  
+                <Outlines id={id} owner={response ? response.userId :  false} />
             </Card>    
             <Card>
                 <CardHeader><Subheading>Stav práce</Subheading></CardHeader>
                 {/* <Outlines id={id} owner={response ? response.userId :  false} />*/}  
             </Card> 
             <Card>
-                <CardHeader><Subheading>Rozpočet</Subheading></CardHeader>
-                {/* <Outlines id={id} owner={response ? response.userId :  false} />*/}  
+            {editingCosts ? <EditCosts data={response} id={id} owner={response ? response.userId :  false} switchEditMode={setEditingCosts} fetchData={fetchData} /> : <Costs data={response} owner={response ? response.userId :  false} switchEditMode={setEditingCosts} />}
             </Card>    
         </CardContainer>
         </>
