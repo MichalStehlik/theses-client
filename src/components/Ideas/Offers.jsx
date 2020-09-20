@@ -152,9 +152,9 @@ const Offers = props => {
         ? 
         <CardFooter>
             <ButtonBlock>
-                {offered ? <Button onClick={removeOffer}>Zrušit mou nabídku</Button> : <Button onClick={addOffer}>Nabídnout</Button>}
-                {(props.admin && (list.length > 0)) ? <Button onClick={removeAll}>Zrušit vše</Button> : ""}
-                <Button disabled>Vytvořit zadání</Button>
+                {offered ? <Button onClick={removeOffer}>Zrušení mé nabídky</Button> : <Button onClick={addOffer}>Nabídnout</Button>}
+                {(props.admin && (list.length > 0)) ? <Button onClick={removeAll}>Zrušení všech nabídek</Button> : ""}
+                <Button disabled>Vytvoření zadání práce</Button>
             </ButtonBlock>
         </CardFooter>
         : ""

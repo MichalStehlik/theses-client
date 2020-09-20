@@ -85,7 +85,7 @@ export const EditCosts = props => {
                     <CKEditor
                         editor={ Editor }
                         data={values.detailexpenditures}
-                        config={{toolbar: ['bold', 'italic', 'strike', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'table', '|', 'paste' ]}}
+                        config={{toolbar: ['bold', 'italic', 'strike', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'table', '|', 'Paste' ]}}
                         onInit={ editor => {  } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
@@ -99,7 +99,7 @@ export const EditCosts = props => {
                     <ErrorMessage name="description">{msg => <Alert variant="error" text={msg} />}</ErrorMessage>
                 </FormGroup>
                 <div>
-                    <Button type="submit" variant="primary" disabled={!(isValid || isSubmitting)}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>
+                    <Button type="submit" variant="primary" disabled={!(isValid || isSubmitting)}>{!isSubmitting ? "Uložení" : "Pracuji"}</Button>
                     <Button onClick={()=>{props.switchEditMode(false)}}>Zpět</Button>
                 </div>
             </Form>

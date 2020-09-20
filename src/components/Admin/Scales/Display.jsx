@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useAppContext, ADD_MESSAGE} from "../../../providers/ApplicationProvider";
 import {Modal, ButtonBlock, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem, Button, CardFooter, Paragraph } from "../../general";
 import {useHistory} from "react-router-dom";
-import {Genders, ADMIN_ROLE} from "../../../configuration/constants";
+import {ADMIN_ROLE} from "../../../configuration/constants";
 import axios from "axios";
 
 const Display = props => {
@@ -17,24 +17,15 @@ const Display = props => {
         return () => {setShowDelete(false); setIsDeleting(false);};
     },[]);
     useEffect(()=>{ 
-        setIsEditable((profile !== null) && ((profile.sub === props.owner || profile[ADMIN_ROLE] === "1")));
+        setIsEditable((profile !== null) && (profile[ADMIN_ROLE] === "1") && (Number(props.data.sets) == 0 ));
      },[accessToken, profile, props.owner]);
         return (
             <>
             <CardHeader><Subheading>Obecné informace</Subheading></CardHeader>
             <CardBody>
                 <CardTypeValueList>
-                    <CardTypeValueItem type="ID" value={props.data.id} />
-                    <CardTypeValueItem type="Jméno" value={props.data.firstName} />
-                    <CardTypeValueItem type="Prostřední jméno" value={props.data.middleName} />
-                    <CardTypeValueItem type="Příjmení" value={props.data.lastName} />
-                    <CardTypeValueItem type="Pohlaví" value={Genders[props.data.gender]} />
-                    <CardTypeValueItem type="Může vypracovávat práci" value={props.data.canBeAuthor ? "ano" : "ne"}/>
-                    <CardTypeValueItem type="Může hodnotit práci" value={props.data.canBeEvaluator ? "ano" : "ne"} />
-                    <CardTypeValueItem type="Ikona" value={props.data.iconImage ? <img src={"data:" + props.data.iconImageFormat + ";base64," + props.data.iconImage} alt="" /> : "není"} />
-                    <CardTypeValueItem type="Email" value={<a href={"mailto:" + props.data.email}>{props.data.email}</a>} />
-                    <CardTypeValueItem type="Uzamčená ikona" value={props.data.lockedIcon ? "ano" : "ne"} />
-                    <CardTypeValueItem type="Uzamčená data" value={props.data.lockedChange ? "ano" : "ne"} />
+                    <CardTypeValueItem type="Název" value={props.data.name} />
+                    <CardTypeValueItem type="Počet sad, kde je použita" value={props.data.sets} />
                 </CardTypeValueList>
             </CardBody>
             {isEditable ? 
@@ -51,31 +42,32 @@ const Display = props => {
             active={showDelete} 
             variant="danger"
             onDismiss={()=>setShowDelete(false)} 
-            title="Opravdu smazat uživatele?"
+            title="Opravdu smazat hodnotící škálu?"
             actions={
                 <>
                     <Button variant="light" outline onClick={async ()=>{
                         setIsDeleting(true);
-                        axios.delete(process.env.REACT_APP_API_URL + "/users/" + props.data.id, {headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" }})
+                        axios.delete(process.env.REACT_APP_API_URL + "/scales/" + props.data.id, {headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" }})
                         .then(response => {
-                            dispatch({type: ADD_MESSAGE, text: "Uživatel byl smazán.", variant: "success", dismissible: true, expiration: 3});
-                            history.push("/admin/users");
+                            dispatch({type: ADD_MESSAGE, text: "Škála byla smazána.", variant: "success", dismissible: true, expiration: 3});
+                            history.push("/admin/scales");
                         })
                         .catch(error => {
                             if (error.response)
                             {
                                 if (error.response.status === 500)
                                 {
-                                    dispatch({type: ADD_MESSAGE, text: "Server nedokázal smazat záznam uživatele. Důvodem může být chyba serveru nebo ochrana konzistentnosti dat.", variant: "error", dismissible: true, expiration: 3});
+                                    dispatch({type: ADD_MESSAGE, text: "Server nedokázal smazat záznam škály. Důvodem může být chyba serveru nebo ochrana konzistence dat.", variant: "error", dismissible: true, expiration: 8});
                                 }
                                 else
                                 {
-                                    dispatch({type: ADD_MESSAGE, text: "Smazání uživatele se nepodařilo. (" + error.response.status + ")", variant: "error", dismissible: true, expiration: 3});
+                                    dispatch({type: ADD_MESSAGE, text: "Smazání škály se nepodařilo. (" + error.response.status + ")", variant: "error", dismissible: true, expiration: 3});
                                 }
+                                   
                             }
                             else
                             {
-                                dispatch({type: ADD_MESSAGE, text: "Smazání uživatele se nepodařilo.", variant: "error", dismissible: true, expiration: 3});
+                                dispatch({type: ADD_MESSAGE, text: "Smazání škály se nepodařilo.", variant: "error", dismissible: true, expiration: 3});
                             }
                         })
                         .then(()=>{
@@ -88,8 +80,8 @@ const Display = props => {
                 </>
             }
         >
-            <Paragraph>Takto smazaný záznam nebude možné nijak obnovit.</Paragraph>
-            <Paragraph>Pokud uživatel má nějaké vlastní náměty, je autorem nebo hodnotitelem práce, smazání nebude úspěšné.</Paragraph>
+            <Paragraph>Takto smazanou škálu hodnocení nebude možné nijak obnovit.</Paragraph>
+            <Paragraph>Její smazání nebude úspěšné, pokud je použita v nějaké sadě.</Paragraph>
         </Modal>
             </>
         ); 

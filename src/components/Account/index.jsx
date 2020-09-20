@@ -17,6 +17,8 @@ const Account = props => {
             <ActionLink to="/account">Profil</ActionLink>
             <ActionLink to="/account/tokens">Přihlašovací údaje</ActionLink>
             <ActionLink to="/account/offer">Nabídka námětů</ActionLink>
+            <ActionLink to="/console">Konzola API</ActionLink>
+            <ActionLink to="/test">Test rozhraní</ActionLink>
             </div>
             <Switch>
                 <Route exact path="/account" component={Profile} />
@@ -29,7 +31,13 @@ const Account = props => {
     }
     else
     {
-        return <Button onClick={() => {userManager.signinRedirect()}}>Přihlásit</Button>
+        return (
+            <>
+            <Button onClick={() => {userManager.signinRedirect()}}>Přihlásit</Button>
+            <ActionLink to="/console">Konzola API</ActionLink>
+            <ActionLink to="/test">Test rozhraní</ActionLink>
+            </>
+        );
     }    
 }
 

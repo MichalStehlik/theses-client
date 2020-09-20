@@ -1,9 +1,7 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useAppContext, ADD_MESSAGE} from "../../providers/ApplicationProvider";
 import {Table, TableBody, TableHeader, TableRow, DataCell, HeadCell, TableFooter, Button, CardHeader, CardFooter, CardBody, Subheading, ButtonBlock } from "../general";
 import {ADMIN_ROLE, EVALUATOR_ROLE} from "../../configuration/constants";
-import {WorkStates} from "../../configuration/constants";
-import axios from "axios";
 
 const Display = props => {
     const [{accessToken, profile}, dispatch] = useAppContext();

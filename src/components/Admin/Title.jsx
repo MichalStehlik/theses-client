@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { Heading } from "../general";
+import { PageTitle } from "../general";
 import {Link} from "react-router-dom";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 
@@ -8,11 +8,12 @@ const Title = props => {
     useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Úvodní stránka"}); },[dispatch]);
     return (
         <>
-        <Heading>Administrativní rozhraní</Heading>
+        <PageTitle>Administrativní rozhraní</PageTitle>
         <ul>
-            <li><Link to="/admin/users">Uživatelé</Link></li>
-            <li><Link to="/admin/sets">Sady</Link></li>
             <li><Link to="/admin/targets">Cíle</Link></li>
+            <li><Link to="/admin/sets">Sady</Link></li>
+            <li><Link to="/admin/scales">Škály</Link></li>
+            <li><Link to="/admin/users">Uživatelé</Link></li>
         </ul>
         </>
     );

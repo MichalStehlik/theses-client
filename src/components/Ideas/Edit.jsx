@@ -84,7 +84,7 @@ export const Edit = props => {
                     <CKEditor
                         editor={ Editor }
                         data={values.description}
-                        config={{toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ], placeholder: "Práce se zabývá výzkumem rychlosti průměrného lenochoda."}}
+                        config={{toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ], placeholder: "Práce se zabývá vytvořením stroje vykonajícího práci bez vnějšího zdroje energie způsobem, jaký svět zatím nikdy neviděl."}}
                         onInit={ editor => {  } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
@@ -101,7 +101,7 @@ export const Edit = props => {
                 <FormTextInput name="subject" label="Zkratka předmětu nebo předmětů, kam práce spadá" placeholder="FYZ" />
                 <FormTextInput name="participants" label="Počet řešitelů" placeholder="7" type="number" min="1" max="10" />
                 <div>
-                    <Button type="submit" variant="primary" disabled={!(isValid || isSubmitting)}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>
+                    <Button type="submit" variant="primary" disabled={!(isValid || isSubmitting)}>{!isSubmitting ? "Uložení" : "Pracuji"}</Button>
                     <Button onClick={()=>{props.switchEditMode(false)}}>Zpět</Button>
                 </div>
             </Form>

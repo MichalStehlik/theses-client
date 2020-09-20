@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Formik } from 'formik';
-import { Alert, Button, Form, FormTextInput, FormCheckbox, FormRadioGroup, ActionLink, Card, CardContainer} from "../../general";
+import { Alert, Button, Form, FormTextInput, ActionLink, Card, CardContainer} from "../../general";
 import {useHistory} from "react-router-dom";
 import {useAppContext, SET_TITLE, ADD_MESSAGE} from "../../../providers/ApplicationProvider";
 import Axios from 'axios';
@@ -11,7 +11,7 @@ const Create = props => {
     const [ok, setOk] = useState(false);
     let history = useHistory();
     useEffect(() => {
-        dispatch({type: SET_TITLE, payload: "Vytvoření sady"});
+        dispatch({type: SET_TITLE, payload: "Vytvoření škály"});
         setFailed(false);
         setOk(false);
     },[dispatch]);
@@ -29,30 +29,19 @@ const Create = props => {
                 year: "",
                 active: true,
                 template: 0,
-                scale: 1,
+                maxGrade: 5,
                 requiredGoals: 3,
                 requiredOutlines: 3,
             }}
             validate={values=>{
                 let errors = {};
                 if (!values.name) errors.name = "Vyplňte název";
-                if (values.year === "") errors.year = "Vyplňte rok";
-                if (values.template === "") errors.template = "Vyberte šablonu";
-                if (values.scale === "") errors.scale = "Vyberte standardní škálu hodnocení";
-                if (values.requiredGoals === "") errors.requiredGoals = "Nastavte počet požadovaných cílů";
-                if (values.requiredOutlines === "") errors.requiredOutlines = "Nastavte počet požadovaných bodů osnovy";
                 return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
-                Axios.post(process.env.REACT_APP_API_URL + "/sets", {
+                Axios.post(process.env.REACT_APP_API_URL + "/scales", {
                     Name: values.name,
-                    Year: Number(values.year),
-                    Active: values.active,
-                    Template: Number(values.template),
-                    ScaleId: Number(values.scale),
-                    RequiredGoals: Number(values.requiredGoals),
-                    RequiredOutlines: Number(values.requiredOutlines)
                 }, {
                     headers: {
                         Authorization: "Bearer " + accessToken,
@@ -62,8 +51,8 @@ const Create = props => {
                 .then(response => {
                     setOk(true);
                     setFailed(false);
-                    dispatch({type: ADD_MESSAGE, text: "Sada byla vytvořena.", variant: "success", dismissible: true, expiration: 3});
-                    history.push("/admin/sets");
+                    dispatch({type: ADD_MESSAGE, text: "Škála byla vytvořena.", variant: "success", dismissible: true, expiration: 3});
+                    history.push("/admin/scales");
                 })
                 .catch(error => {
                     if (error.response)
@@ -83,18 +72,12 @@ const Create = props => {
         >
             {({isSubmitting, isValid, dirty}) => (
             <Form>
-                {(failed !== false) ? <Alert text={"Uložení sady se nepodařilo. (" + failed + ")"}  variant="error" /> : ""}
-                {(ok !== false) ? <Alert text={"Uložení sady se podařilo."}  variant="success" /> : ""}
-                <FormTextInput name="name" label="Název" placeholder="MP 2021/22" />
-                <FormTextInput name="year" label="Rok" type="number" placeholder="2020" />
-                <FormCheckbox name="active" label="Aktivní" />
-                <FormRadioGroup name="template" label="Šablona" values={{0: "Maturitní práce", 1: "Ročníkové práce"}} />
-                <FormTextInput name="scale" label="Škála známek" type="number" placeholder="1" />
-                <FormTextInput name="requiredGoals" label="Minimální počet cílů" type="number" placeholder="5" />
-                <FormTextInput name="requiredOutlines" label="Minimální počet bodů osnovy" type="number" placeholder="5" />
+                {(failed !== false) ? <Alert text={"Uložení škály se nepodařilo. (" + failed + ")"}  variant="error" /> : ""}
+                {(ok !== false) ? <Alert text={"Uložení škály se podařilo."}  variant="success" /> : ""}
+                <FormTextInput name="name" label="Název" placeholder="Standardní škála" />
                 <div>
                     <Button type="submit" variant="primary" disabled={!(isValid && dirty) || isSubmitting}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>
-                    <Button onClick={e => {history.push("/admin/sets")}}>Zpět</Button>
+                    <Button onClick={e => {history.push("/admin/scales")}}>Zpět</Button>
                 </div>
             </Form>
             )}

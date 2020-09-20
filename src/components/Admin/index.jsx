@@ -5,6 +5,7 @@ import Title from "./Title";
 import Users from "./Users";
 import Targets from "./Targets";
 import Sets from "./Sets";
+import Scales from "./Scales";
 import NotFound from "../NotFound";
 
 const Home = props => {
@@ -14,6 +15,7 @@ const Home = props => {
             <Route path="/admin/users" component={Users} />
             <Route path="/admin/targets" component={Targets} />
             <Route path="/admin/sets" component={Sets} />
+            <Route path="/admin/scales" component={Scales} />
             <Route exact component={NotFound} />
         </Switch>
     );

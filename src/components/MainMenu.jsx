@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import {useAppContext} from "../providers/ApplicationProvider";
 import NavigationLink from "./common/NavigationLink";
 import {ReactComponent as WorkIcon} from "../assets/icons/graduate.svg";
-import {ReactComponent as HomeIcon} from "../assets/icons/home.svg";
+import {ReactComponent as HomeIcon} from "../assets/icons/home3.svg";
 import {ReactComponent as IdeaIcon} from "../assets/icons/lightbulb.svg";
-import {ReactComponent as ChartIcon} from "../assets/icons/pie-chart.svg";
+import {ReactComponent as OverviewIcon} from "../assets/icons/table2.svg";
 import {ReactComponent as UserIcon} from "../assets/icons/user.svg";
-import {ReactComponent as TerminalIcon} from "../assets/icons/terminal.svg";
 import {ReactComponent as HammerIcon} from "../assets/icons/hammer.svg";
+import {ReactComponent as EvaluationIcon} from "../assets/icons/check.svg";
 
 import {devices} from "../configuration/layout";
 import {ADMIN_ROLE} from "../configuration/constants";
@@ -83,11 +83,10 @@ const MainMenu = props => {
         <MainMenuItem to="/" exact icon={<HomeIcon />} text="Úvodní stránka" />
         <MainMenuItem to="/ideas" icon={<IdeaIcon />} text="Náměty" />
         <MainMenuItem to="/works" icon={<WorkIcon />} text="Práce" />
-        <MainMenuItem to="/overviews" icon={<ChartIcon />} text="Souhrny" />
+        <MainMenuItem to="/overviews" icon={<OverviewIcon />} text="Souhrny" />
+        <MainMenuItem to="/evaluation" icon={<EvaluationIcon />} text="Hodnocení" />
         <MainMenuItem to="/users" icon={<UserIcon />} text="Uživatelé" />
         {accessToken && (profile[ADMIN_ROLE] === "1") ? <MainMenuItem to="/admin" icon={<HammerIcon />} text="Administrace" /> : ""}
-        <MainMenuItem to="/console" icon={<TerminalIcon />} text="Konzola API" />
-        <MainMenuItem to="/test" icon={<HammerIcon />} text="Pokusy" />
     </StyledMainMenu>
     );
 };

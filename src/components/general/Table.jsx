@@ -16,7 +16,6 @@ export const Table = styled.table`
 ${props => props.width ? "width: {props.width};" : ""}
 border-collapse: collapse;
 box-sizing: margin-box;
-margin: 5px;
 & td, & th {
   border: 1px solid #ddd;
   padding: 8px;
@@ -41,12 +40,18 @@ export const TableRow = styled.tr`
 `;
 
 export const DataCell = styled.td`
-text-align: ${props => props.align};
+text-align: ${props => props.horizontal};
+vertical-align: ${props => props.vertical};
 `;
 
+DataCell.defaultProps = {horizontal: "left", vertical: "center"};
+
 export const HeadCell = styled.th`
-text-align: left;
+text-align: ${props => props.horizontal};
+vertical-align: ${props => props.vertical};
 `;
+
+HeadCell.defaultProps = {horizontal: "left", vertical: "center"};
 
 const Paginator = styled.div`
 display: grid;

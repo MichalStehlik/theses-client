@@ -38,8 +38,8 @@ const Display = props => {
             {isEditable ? 
             <CardFooter>
                 <ButtonBlock>
-                    <Button onClick={e => props.switchEditMode(true)}>Editovat</Button>   
-                    <Button onClick={()=>{setShowDelete(true)}} disabled={isDeleting}>{!isDeleting ? "Smazat" : "Pracuji"}</Button>
+                    <Button onClick={e => props.switchEditMode(true)}>Editace</Button>   
+                    <Button onClick={()=>{setShowDelete(true)}} disabled={isDeleting}>{!isDeleting ? "Smazání" : "Pracuji"}</Button>
                 </ButtonBlock>
             </CardFooter>
             : 

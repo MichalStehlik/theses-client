@@ -17,7 +17,7 @@ export const Detail = props => {
     const fetchData = useCallback(() => {
         setIsLoading(true);
         setError(false);
-        axios.get(process.env.REACT_APP_API_URL + "/sets/" + id,{
+        axios.get(process.env.REACT_APP_API_URL + "/scales/" + id,{
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json"
@@ -38,7 +38,7 @@ export const Detail = props => {
         });
         setIsLoading(false);
     },[accessToken, id]);  
-    useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Detail sady"}); },[dispatch]);
+    useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Detail hodnotící škály"}); },[dispatch]);
     useEffect(()=>{fetchData();},[]);
     if (isLoading) {
         return <Loader size="2em"/>;
@@ -46,7 +46,7 @@ export const Detail = props => {
         switch (error.status)
         {
             case 400: return <Alert text={"Nesprávný formát identifikátoru nebo jiná chyba požadavku"} variant="error"/>;
-            case 404: return <Alert text={"Neznámá sada"} variant="error"/>;
+            case 404: return <Alert text={"Neznámá škála"} variant="error"/>;
             default: return <Alert text={error.text + " (" + error.status + ")"} variant="error"/>;
         }        
     } else if (response) {

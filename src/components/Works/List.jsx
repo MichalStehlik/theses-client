@@ -1,7 +1,6 @@
 import React, {useState, useMemo, useCallback, useEffect} from 'react';
 import {Link} from "react-router-dom";
-import {DataTable, ListColumnFilter} from "../general";
-import {DateTime} from "../common";
+import {DataTable, ListColumnFilter, ActionLink} from "../general";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import axios from "axios";
 import {WorkStates} from "../../configuration/constants";
@@ -97,7 +96,8 @@ const List = props => {
     return (
       <>
       <>
-
+      <ActionLink to="/works/create">Rychlé vytvoření</ActionLink>
+      <ActionLink to="/works/guide">Průvodce vytvořením</ActionLink>
       </>
       <DataTable columns={columns} data={data} fetchData={fetchData} isLoading={isLoading} error={error} totalPages={totalPages} />
       </>
@@ -107,5 +107,5 @@ const List = props => {
 export default List;
 
 /*
-      <ActionLink to="/works/create">Nová</ActionLink>
+      
 */

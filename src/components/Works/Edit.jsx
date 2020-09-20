@@ -133,9 +133,12 @@ export const Edit = props => {
                 <FormGroup>
                     <Label htmlFor="description">Téma</Label>
                     <CKEditor
-                        editor={ Editor }
+                        editor={Editor}
+                        type="inline"
                         data={values.description}
-                        config={{toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ], placeholder: "Práce se zabývá výzkumem rychlosti průměrného lenochoda."}}
+                        config={
+                            {toolbar: [ 'bold', 'italic', 'strike', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'table', '|', 'Paste' ], placeholder: "Práce se zabývá vytvořením stroje vykonajícího práci bez vnějšího zdroje energie způsobem, jaký svět zatím nikdy neviděl."}
+                        }
                         onInit={ editor => {  } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
@@ -164,7 +167,7 @@ export const Edit = props => {
                     {Array.isArray(sets) ? sets.map((item,index) => (<option key={index} value={item.id}>{item.name}</option>)) : ""}
                 </FormSelect>
                 <div>
-                    <Button type="submit" variant="primary" disabled={!(isValid || isSubmitting)}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>
+                    <Button type="submit" variant="primary" disabled={!(isValid || isSubmitting)}>{!isSubmitting ? "Uložení" : "Pracuji"}</Button>
                     <Button onClick={()=>{props.switchEditMode(false)}}>Zpět</Button>
                 </div>
             </Form>

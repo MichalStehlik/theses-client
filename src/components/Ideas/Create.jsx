@@ -25,7 +25,7 @@ export const Create = props => {
             <Formik
             initialValues={{
                 name: "",
-                description: "Práce se zabývá ...",
+                description: "",
                 participants: 1,
                 resources: "",
                 subject: "",
@@ -84,7 +84,7 @@ export const Create = props => {
                         <CKEditor
                             editor={ Editor }
                             data={values.description}
-                            config={{toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ], placeholder: "Práce se zabývá výzkumem rychlosti průměrného lenochoda."}}
+                            config={{toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ], placeholder: "Práce se zabývá vytvořením stroje vykonajícího práci bez vnějšího zdroje energie způsobem, jaký svět zatím nikdy neviděl."}}
                             onInit={ editor => {
                             } }
                             onChange={ ( event, editor ) => {

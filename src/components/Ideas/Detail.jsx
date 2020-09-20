@@ -57,7 +57,7 @@ export const Detail = props => {
     } else if (response) {
     return (
         <>
-        <ActionLink to=".">Seznam</ActionLink>
+        <ActionLink to="/ideas">Seznam</ActionLink>
         <PageTitle>{response.name}</PageTitle>
         <CardContainer>
             <Card>

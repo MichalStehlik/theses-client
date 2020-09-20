@@ -106,7 +106,7 @@ const List = props => {
     return (
       <>
       <>
-      <ActionLink to="/ideas/create">Nový</ActionLink>
+      <ActionLink to="/ideas/create">Vytvoření</ActionLink>
       </>
       <DataTable columns={columns} data={data} fetchData={fetchData} isLoading={isLoading} error={error} totalPages={totalPages} />
       </>

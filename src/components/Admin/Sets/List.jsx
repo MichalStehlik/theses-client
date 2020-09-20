@@ -69,7 +69,7 @@ const List = props => {
       <>
       <>
       <ActionLink to="/admin">Administrace</ActionLink>
-      <ActionLink to="/admin/sets/create">Nová</ActionLink>
+      <ActionLink to="/admin/sets/create">Vytvoření</ActionLink>
       </>
       <DataTable columns={columns} data={data} fetchData={fetchData} isLoading={isLoading} error={error} totalPages={totalPages} />
       </>

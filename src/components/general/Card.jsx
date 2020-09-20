@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme from "styled-theming";
 import {devices} from "../../configuration/layout";
 
 export const CardContainer = styled.div`
@@ -10,8 +11,10 @@ align-items: stretch;
 `;
 
 export const Card = styled.section`
-background-color: white;
-flex-basis: 50rem;
+background-color: ${props => props.theme.colors.cardBackground};
+color: ${props => props.theme.colors.cardForeground};
+flex-basis: 45rem;
+flex-grow: 1;
 border: 1px solid #cccccc;
 margin: 5px;
 box-sizing: border-box;

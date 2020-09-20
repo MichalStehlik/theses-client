@@ -1,9 +1,8 @@
 import React, {useState, useMemo, useCallback, useEffect} from 'react';
 import {Link} from "react-router-dom";
-import {DataTable, Badge, ActionLink} from "../../general";
+import {DataTable, ActionLink, BoolColumnFilter} from "../../general";
 import {useAppContext, SET_TITLE} from "../../../providers/ApplicationProvider";
 import axios from "axios";
-import {invertColor} from "../../../helpers/colors";
 
 const List = props => {
     const [isLoading, setIsLoading] = useState(false);
@@ -13,12 +12,13 @@ const List = props => {
     const [totalPages, setTotalPages] = useState(0);
     const [{accessToken}, dispatch] = useAppContext();
 
-    useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Seznam cílových skupin pro náměty"}); },[dispatch]);
+    useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Seznam hodnotících škál"}); },[dispatch]);
 
     const columns = useMemo(() => [
-      {Header: "Text", accessor: "text"},
-      {Header: "Barva", accessor: "color", disableSortBy: true, disableFilters:true, Cell: (data)=>(<Badge background={"#" + data.cell.value.name.substring(2,8)} color={invertColor("#" + data.cell.value.name.substring(2,8))}>{"#" + data.cell.value.name.substring(2,8)}</Badge>)},
-      {Header: "Akce", Cell: (data)=>(<Link to={"/admin/targets/" + data.row.original.id}>Detail</Link>)}
+      {Header: "Název", accessor: "name"},
+      {Header: "Stupně hodnocení", accessor: "grades", disableSortBy: true, disableFilters:true},
+      {Header: "Použito", accessor: "sets", disableFilters:true, disableSortBy: true},
+      {Header: "Akce", Cell: (data)=>(<Link to={"/admin/scales/" + data.row.original.id}>Detail</Link>)}
   ],[]);  
 
     const fetchData = useCallback(({page, size, sort, filters})=>{
@@ -37,12 +37,12 @@ const List = props => {
         if (Array.isArray(filters)) {
           for (let f of filters) {
             switch (f.id) {
-              case "text": parameters.push("text=" + f.value); break;
+              case "name": parameters.push("name=" + f.value); break;
               default: break;
             }
           }
         }      
-        axios.get(process.env.REACT_APP_API_URL + "/targets?" + parameters.join("&"), {headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" }})
+        axios.get(process.env.REACT_APP_API_URL + "/scales?" + parameters.join("&"), {headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" }})
         .then(response => {
           setData(response.data.data);
           setTotalPages(response.data.pages);
@@ -67,7 +67,7 @@ const List = props => {
       <>
       <>
       <ActionLink to="/admin">Administrace</ActionLink>
-      <ActionLink to="/admin/targets/create">Vytvoření</ActionLink>
+      <ActionLink to="/admin/scales/create">Vytvoření</ActionLink>
       </>
       <DataTable columns={columns} data={data} fetchData={fetchData} isLoading={isLoading} error={error} totalPages={totalPages} />
       </>
