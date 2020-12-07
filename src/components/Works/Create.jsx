@@ -85,7 +85,7 @@ export const Create = props => {
                 if (!values.description) errors.description = "Vyplňte popis námětu";
                 if (!values.classname) errors.classname = "Vyplňte třídu autora";
                 if (!values.setid) errors.setid = "Práce musí být v aktivní sadě";
-                if (!values.authorid) errors.authorid = "Práce musí mít uvedeného autora";
+                if (!values.authorid) errors.authorid = "Práce musí mít autora";
                 if (!values.managerid) errors.managerid = "Práce musí mít vedoucího";
                 return errors;
             }}

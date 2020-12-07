@@ -35,8 +35,10 @@ export const Detail = props => {
                 setError({status: 0, text: "Neznámá chyba"});
             }         
             setResponse([]);
-        });
-        setIsLoading(false);
+        })
+        .then(()=>{
+            setIsLoading(false);
+        });      
     },[accessToken, id]);  
     useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Detail sady"}); },[dispatch]);
     useEffect(()=>{fetchData();},[]);

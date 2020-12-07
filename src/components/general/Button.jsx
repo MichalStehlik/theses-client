@@ -1,6 +1,5 @@
 import styled, {keyframes} from 'styled-components';
 import theme from "styled-theming";
-import {invertColor} from "../../helpers/colors";
 
 const pulse = keyframes`
 0% {

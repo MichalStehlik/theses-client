@@ -7,7 +7,7 @@ export {Card, CardHeader, CardFooter, CardBody, CardContainer, CardTypeValueList
 export {default as CodeBlock}  from './CodeBlock';
 export {Col}  from './Grid';
 export {Container}  from './Grid';
-export {Field, Form, Input, Label, Select, Textarea, FormGroup, FormTextInput, FormCheckbox, FormSelect, FormRadio, FormRadioGroup}  from './Form';
+export {Field, Form, Input, Label, Select, Textarea, FormGroup, FormTextInput, FormCheckbox, FormSelect, FormRadio, FormRadioGroup, FormError}  from './Form';
 export {default as Heading} from './Heading';
 export {default as Icon}  from './Icon';
 export {default as Loader}  from './Loader';
@@ -33,6 +33,8 @@ export {default as MiniButton,
     LastMiniButton, 
     PreviousMiniButton, 
     ResetMiniButton,
+    FilterMiniButton,
+    SearchMiniButton,
     FirstMiniButton}  from './MiniButton';
 export {default as Modal}  from './Modal';
 export {default as Paragraph}  from './Paragraph';

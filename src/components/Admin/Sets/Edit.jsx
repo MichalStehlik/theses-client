@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Formik } from 'formik';
-import { Alert, Button, Form, FormTextInput, FormCheckbox, FormRadioGroup} from "../../general";
+import { Alert, Button, Form, FormTextInput, FormCheckbox, FormRadioGroup, FormSelect} from "../../general";
 import {useAppContext, SET_TITLE, ADD_MESSAGE} from "../../../providers/ApplicationProvider";
 import Axios from 'axios';
 
@@ -8,11 +8,26 @@ const Edit = props => {
     const [{accessToken}, dispatch] = useAppContext();
     const [failed, setFailed] = useState(false);
     const [ok, setOk] = useState(false);
+    const [scales, setScales] = useState(null);
+    const fetchScalesData = useCallback(() => {
+        Axios.get(process.env.REACT_APP_API_URL + "/scales",{
+            headers: {
+                Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            } 
+        })
+        .then(response => {
+            setScales(response.data.data);
+        })
+    },[accessToken]);
+
     useEffect(() => {
         dispatch({type: SET_TITLE, payload: "Editace sady"});
         setFailed(false);
+        fetchScalesData();
         setOk(false);
-    },[dispatch]);
+    },[dispatch, fetchScalesData]);
+
     return (
         <Formik
             initialValues={{
@@ -20,7 +35,7 @@ const Edit = props => {
                 year: props.data.year ? props.data.year : "",
                 active: props.data.active ? props.data.active : "",
                 template: (props.data.template !== undefined) ? props.data.template : null,
-                maxGrade: props.data.maxGrade ? props.data.maxGrade : "",
+                scale: props.data.scaleId ? props.data.scaleId : "",
                 requiredGoals: props.data.requiredGoals ? props.data.requiredGoals : "",
                 requiredOutlines: props.data.requiredOutlines ? props.data.requiredOutlines : "",
             }}
@@ -29,7 +44,7 @@ const Edit = props => {
                 if (!values.name) errors.name = "Vyplňte název";
                 if (values.year === "") errors.year = "Vyplňte rok";
                 if (values.template === "") errors.template = "Vyberte šablonu";
-                if (values.maxGrade === "") errors.maxGrade = "Nastavte nejvyšší známku";
+                if (!values.scale) errors.scale = "Vyberte standardní škálu hodnocení";
                 if (values.requiredGoals === "") errors.requiredGoals = "Nastavte počet požadovaných cílů";
                 if (values.requiredOutlines === "") errors.requiredOutlines = "Nastavte počet požadovaných bodů osnovy";
                 return errors;
@@ -41,7 +56,7 @@ const Edit = props => {
                     Year: Number(values.year),
                     Active: values.active,
                     Template: Number(values.template),
-                    MaxGrade: Number(values.maxGrade),
+                    ScaleId: Number(values.scale),
                     RequiredGoals: Number(values.requiredGoals),
                     RequiredOutlines: Number(values.requiredOutlines),
                     Id: Number(props.id)
@@ -84,7 +99,10 @@ const Edit = props => {
                 <FormTextInput name="year" label="Rok" type="number" placeholder="2020" />
                 <FormCheckbox name="active" label="Aktivní" />
                 <FormRadioGroup name="template" label="Šablona" values={{0: "Maturitní práce", 1: "Ročníkové práce"}} />
-                <FormTextInput name="maxGrade" label="Škála známek" type="number" placeholder="5" />
+                <FormSelect name="scale" label="Standardní škála známek">
+                    <option></option>
+                    {Array.isArray(scales) ? scales.map((item,index) => (<option key={index} value={item.id}>{item.name}</option>)) : ""}
+                </FormSelect>
                 <FormTextInput name="requiredGoals" label="Minimální počet cílů" type="number" placeholder="5" />
                 <FormTextInput name="requiredOutlines" label="Minimální počet bodů osnovy" type="number" placeholder="5" />
                 <div>

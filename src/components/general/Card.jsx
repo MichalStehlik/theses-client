@@ -8,12 +8,14 @@ display: flex;
 flex-wrap: wrap;
 justify-content: flex-start;
 align-items: stretch;
+& > * {
+    flex-basis: 45rem;
+}
 `;
 
 export const Card = styled.section`
 background-color: ${props => props.theme.colors.cardBackground};
 color: ${props => props.theme.colors.cardForeground};
-flex-basis: 45rem;
 flex-grow: 1;
 border: 1px solid #cccccc;
 margin: 5px;
@@ -44,6 +46,9 @@ padding: 10px;
 export const CardTypeValueList = styled.div`
 display: flex;
 flex-direction: column;
+& > dl:first-child {
+    border-top: none;
+}
 `;
 
 const StyledCardTypeValueItem = styled.dl`

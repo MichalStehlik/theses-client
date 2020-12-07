@@ -3,24 +3,30 @@ import { useParams } from "react-router-dom";
 import { Alert, Loader } from "../../general";
 import {useAppContext} from "../../../providers/ApplicationProvider";
 import ContentTable from "./ContentTable";
+import AddRole from "./AddRole";
+import AddTerm from "./AddTerm";
+import EditRole from "./EditRole";
+import EditTerm from "./EditTerm";
 import axios from "axios";
 
-const CONTENT_DISPLAY = 0;
-const CONTENT_ADD_TERM = 1;
-const CONTENT_ADD_ROLE = 2;
+export const CONTENT_DISPLAY = 0;
+export const CONTENT_ADD_TERM = 1;
+export const CONTENT_ADD_ROLE = 2;
+export const CONTENT_EDIT_TERM = 3;
+export const CONTENT_EDIT_ROLE = 4;
 
 export const Content = props => {
     const { id } = useParams();
-    const [{accessToken}, dispatch] = useAppContext();
+    const [{accessToken}] = useAppContext();
     const [contentMode, setContentMode] = useState(CONTENT_DISPLAY);
-    const [editedTerm, setEditedTerm] = useState(null);
-    const [editedRole, setEditedRole] = useState(null);
     const [termsResponse, setTermsResponse] = useState(null);
     const [rolesResponse, setRolesResponse] = useState(null);
     const [isTermsLoading, setIsTermsLoading] = useState(false);
     const [isRolesLoading, setIsRolesLoading] = useState(false);
     const [termsError, setTermsError] = useState(false);
     const [rolesError, setRolesError] = useState(false);
+    const [editedRole, setEditedRole] = useState(null);
+    const [editedTerm, setEditedTerm] = useState(null);
     const fetchTerms = useCallback(() => {
         setIsTermsLoading(true);
         setTermsError(false);
@@ -72,7 +78,7 @@ export const Content = props => {
     useEffect(()=>{
         fetchTerms();
         fetchRoles();
-    },[]);
+    },[fetchTerms, fetchRoles]);
     if (isTermsLoading || isRolesLoading) {
         return <Loader size="2em"/>;
     } else if (termsError !== false) {
@@ -92,9 +98,36 @@ export const Content = props => {
     } else if (termsResponse && rolesResponse) {
         switch (contentMode)
         {
-            case (CONTENT_ADD_TERM) :  return <p>Add term</p>;
-            case (CONTENT_ADD_ROLE) :  return <p>Add role</p>;
-            default : return <ContentTable terms={termsResponse} roles={rolesResponse} />;
+            case (CONTENT_ADD_TERM) :  return <AddTerm setContentMode={setContentMode} setId={id} fetchData={() => {fetchTerms()}} />;
+            case (CONTENT_ADD_ROLE) :  return <AddRole setContentMode={setContentMode} setId={id} fetchData={() => {fetchRoles()}} />;
+            case (CONTENT_EDIT_ROLE) :  return (
+                <EditRole 
+                    setContentMode={setContentMode} 
+                    setId={id} 
+                    fetchData={() => {fetchRoles()}} 
+                    edited={editedRole} 
+                    data={ rolesResponse.filter(r => r.id === editedRole).length === 1 ? rolesResponse.filter(r => r.id === editedRole)[0] : null } 
+                />);
+            case (CONTENT_EDIT_TERM) :  return (
+                <EditTerm 
+                    setContentMode={setContentMode} 
+                    setId={id} 
+                    fetchData={() => {fetchTerms()}} 
+                    edited={editedTerm} 
+                    data={ termsResponse.filter(t => t.id === editedTerm).length === 1 ? termsResponse.filter(t => t.id === editedTerm)[0] : null } 
+                />);
+            default : return (
+                <ContentTable 
+                    setId={id} 
+                    terms={termsResponse} 
+                    roles={rolesResponse} 
+                    setContentMode={setContentMode} 
+                    fetchRoles={fetchRoles} 
+                    fetchTerms={fetchTerms}
+                    setEditedRole={setEditedRole}
+                    setEditedTerm={setEditedTerm}
+                />
+            );
         }
     } else {
         return <Loader size="2em" />;

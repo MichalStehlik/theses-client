@@ -17,7 +17,7 @@ const Display = props => {
         return () => {setShowDelete(false); setIsDeleting(false);};
     },[]);
     useEffect(()=>{ 
-        setIsEditable((profile !== null) && (profile[ADMIN_ROLE] === "1") && (Number(props.data.sets) == 0 ));
+        setIsEditable((profile !== null) && (profile[ADMIN_ROLE] === "1") && (Number(props.data.sets) === 0 ));
      },[accessToken, profile, props.owner]);
         return (
             <>

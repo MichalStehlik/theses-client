@@ -23,6 +23,8 @@ import {ReactComponent as ArrowDownIcon} from "../../assets/icons/arrow_down.svg
 import {ReactComponent as ArrowLeftIcon} from "../../assets/icons/arrow_left.svg";
 import {ReactComponent as ArrowRightIcon} from "../../assets/icons/arrow_right.svg";
 import {ReactComponent as ResetIcon} from "../../assets/icons/reset.svg";
+import {ReactComponent as FilterIcon} from "../../assets/icons/filter.svg";
+import {ReactComponent as SearchIcon} from "../../assets/icons/search.svg";
 
 const StyledMiniButton = styled.span`
 display: inline-flex;
@@ -144,6 +146,14 @@ export const RightMiniButton = props => (
 
 export const ResetMiniButton = props => (
     <MiniButton {...props} glyph={<ResetIcon />} />
+);
+
+export const FilterMiniButton = props => (
+    <MiniButton {...props} glyph={<FilterIcon />} />
+);
+
+export const SearchMiniButton = props => (
+    <MiniButton {...props} glyph={<SearchIcon />} />
 );
 
 export default MiniButton;

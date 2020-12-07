@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router } from "react-router-dom";
 import { Route, Switch } from 'react-router';
-import {ThemeProvider} from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { createBrowserHistory } from "history";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -10,6 +10,7 @@ import { createGlobalStyle } from 'styled-components';
 import LayoutRoute from "./components/layouts/LayoutRoute";
 import MessageLayout from "./components/layouts/MessageLayout";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import TitleLayout from "./components/layouts/TitleLayout";
 
 import TopErrorBoundary from "./components/errors/TopErrorBoundary";
 
@@ -109,7 +110,7 @@ function App() {
                   <LayoutRoute path="/users" component={Users} layout={DashboardLayout} />
                   <LayoutRoute path="/ideas" component={Ideas} layout={DashboardLayout} />
                   <LayoutRoute path="/works" component={Works} layout={DashboardLayout} />
-                  <LayoutRoute exact path="/" component={Home} layout={DashboardLayout} />
+                  <LayoutRoute exact path="/" component={Home} layout={TitleLayout} />
                   <LayoutRoute component={NotFound} layout={MessageLayout} backgroundColor={mainTheme.colors.infoBackground} color={mainTheme.colors.infoForeground} />     
                 </Switch>
               </Router>

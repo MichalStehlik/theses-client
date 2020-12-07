@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Formik } from 'formik';
-import { Alert, Button, Form, FormTextInput, FormCheckbox, FormRadioGroup, ActionLink, Card, CardContainer} from "../../general";
+import { Alert, Button, Form, FormTextInput, FormCheckbox, FormRadioGroup, FormSelect, ActionLink, Card, CardContainer} from "../../general";
 import {useHistory} from "react-router-dom";
 import {useAppContext, SET_TITLE, ADD_MESSAGE} from "../../../providers/ApplicationProvider";
 import Axios from 'axios';
@@ -9,12 +9,26 @@ const Create = props => {
     const [{accessToken}, dispatch] = useAppContext();
     const [failed, setFailed] = useState(false);
     const [ok, setOk] = useState(false);
+    const [scales, setScales] = useState(null);
     let history = useHistory();
+
+    const fetchScalesData = useCallback(() => {
+        Axios.get(process.env.REACT_APP_API_URL + "/scales",{
+            headers: {
+                Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            } 
+        })
+        .then(response => {
+            setScales(response.data.data);
+        })
+    },[accessToken]);
     useEffect(() => {
         dispatch({type: SET_TITLE, payload: "Vytvoření sady"});
         setFailed(false);
+        fetchScalesData();
         setOk(false);
-    },[dispatch]);
+    },[dispatch, fetchScalesData]);
     return (
         <>
         <>
@@ -29,7 +43,7 @@ const Create = props => {
                 year: "",
                 active: true,
                 template: 0,
-                scale: 1,
+                scale: "",
                 requiredGoals: 3,
                 requiredOutlines: 3,
             }}
@@ -38,7 +52,7 @@ const Create = props => {
                 if (!values.name) errors.name = "Vyplňte název";
                 if (values.year === "") errors.year = "Vyplňte rok";
                 if (values.template === "") errors.template = "Vyberte šablonu";
-                if (values.scale === "") errors.scale = "Vyberte standardní škálu hodnocení";
+                if (!values.scale) errors.scale = "Vyberte standardní škálu hodnocení";
                 if (values.requiredGoals === "") errors.requiredGoals = "Nastavte počet požadovaných cílů";
                 if (values.requiredOutlines === "") errors.requiredOutlines = "Nastavte počet požadovaných bodů osnovy";
                 return errors;
@@ -89,7 +103,10 @@ const Create = props => {
                 <FormTextInput name="year" label="Rok" type="number" placeholder="2020" />
                 <FormCheckbox name="active" label="Aktivní" />
                 <FormRadioGroup name="template" label="Šablona" values={{0: "Maturitní práce", 1: "Ročníkové práce"}} />
-                <FormTextInput name="scale" label="Škála známek" type="number" placeholder="1" />
+                <FormSelect name="scale" label="Standardní škála známek">
+                    <option></option>
+                    {Array.isArray(scales) ? scales.map((item,index) => (<option key={index} value={item.id}>{item.name}</option>)) : ""}
+                </FormSelect>
                 <FormTextInput name="requiredGoals" label="Minimální počet cílů" type="number" placeholder="5" />
                 <FormTextInput name="requiredOutlines" label="Minimální počet bodů osnovy" type="number" placeholder="5" />
                 <div>
