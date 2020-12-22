@@ -112,7 +112,7 @@ export const Create = props => {
                 .then(response => {
                     setOk(true);
                     setFailed(false);
-                    history.push("/works/" + response.data.id + "/onBoarding/1");
+                    history.push("/works/" + response.data.id);
                 })
                 .catch(error => {
                     if (error.response)
