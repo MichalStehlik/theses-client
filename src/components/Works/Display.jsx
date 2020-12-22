@@ -3,6 +3,7 @@ import {useAppContext, ADD_MESSAGE} from "../../providers/ApplicationProvider";
 import {Modal, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem, Button, CardFooter, Paragraph, ButtonBlock } from "../general";
 import {DateTime, LoadedUser} from "../common";
 import {useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {ADMIN_ROLE, EVALUATOR_ROLE} from "../../configuration/constants";
 import {WorkStates} from "../../configuration/constants";
 import axios from "axios";
@@ -57,7 +58,7 @@ const Display = props => {
                     <CardTypeValueItem type="Autor" value={<LoadedUser id={props.data.authorId} />} />
                     <CardTypeValueItem type="Vedoucí práce nebo oboru" value={<LoadedUser id={props.data.managerId} />} />
                     <CardTypeValueItem type="Stav" value={WorkStates[props.data.state]} />
-                    <CardTypeValueItem type="Sada" value={setResponse ? setResponse.name : ""} />
+                    <CardTypeValueItem type="Sada" value={setResponse ? <Link to={"/admin/sets/" + setResponse.id}>{setResponse.name}</Link> : ""} />
                     <CardTypeValueItem type="Rok" value={setResponse ? setResponse.year : ""} />
                     <CardTypeValueItem type="Vytvořil" value={<LoadedUser id={props.data.userId} />} />
                     <CardTypeValueItem type="Vytvořeno" value={<DateTime date={props.data.created} />} />

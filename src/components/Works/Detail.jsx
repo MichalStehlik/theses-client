@@ -10,11 +10,13 @@ import Goals from "./Goals";
 import Outlines from "./Outlines";
 import Costs from "./Costs";
 import EditCosts from "./EditCosts";
+import Roles from "./Roles";
 
 export const Detail = props => {
     const { id } = useParams();
     const [{accessToken, profile}, dispatch] = useAppContext();
     const [editing, setEditing] = useState(false);
+    const [addingEvaluator, setAddingEvaluator] = useState(false);
     const [editingCosts, setEditingCosts] = useState(false);
     const [response, setResponse] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -65,6 +67,7 @@ export const Detail = props => {
             </Card>
             <Card>
                 <CardHeader><Subheading>Role a hodnocení</Subheading></CardHeader>
+                <Roles id={id} owner={response ? response.userId :  false} />
             </Card>       
             <Card>
                 <CardHeader><Subheading>Cíle</Subheading></CardHeader>

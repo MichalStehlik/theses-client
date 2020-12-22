@@ -32,6 +32,7 @@ const Display = props => {
                 <CardTypeValueItem type="Škála známek" value={<Scale id={props.data.scaleId} />} />
                 <CardTypeValueItem type="Minimální počet cílů" value={props.data.requiredGoals} />
                 <CardTypeValueItem type="Minimální počet bodů osnovy" value={props.data.requiredOutlines} />
+                <CardTypeValueItem type="Počet prací" value={props.worksCount} />
             </CardTypeValueList>
         </CardBody>
         {isEditable ? 

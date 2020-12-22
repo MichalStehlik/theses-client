@@ -126,6 +126,7 @@ export const Content = props => {
                     fetchTerms={fetchTerms}
                     setEditedRole={setEditedRole}
                     setEditedTerm={setEditedTerm}
+                    worksCount={props.worksCount}
                 />
             );
         }

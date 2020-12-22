@@ -1,10 +1,11 @@
 import React from "react";
 import {Redirect} from "react-router";
-import {useAppContext} from "../../providers/ApplicationProvider";
+import {ADD_MESSAGE, useAppContext} from "../../providers/ApplicationProvider";
 
 const SilentRenew = props => {
-    const [{userManager}] = useAppContext();
+    const [{userManager},dispatch] = useAppContext();
     userManager.signinSilentCallback();
+    dispatch({type: ADD_MESSAGE, variant: "info", text: "Byl načten aktualizovaný bezpečnostní token.", dismissable: true});
     return <Redirect to="/" />;
 }
    

@@ -1,6 +1,6 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import { useParams, Link } from "react-router-dom";
-import { useFetch, Loader, Alert, CardContainer, Card, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem, ActionLink, Paragraph, PageTitle } from "../general";
+import { useFetch, Loader, Alert, CardContainer, Card, CardHeader, CardBody, Subheading, CardTypeValueList, CardTypeValueItem, ActionLink, Paragraph, PageTitle, Table, TableBody, TableRow, DataCell } from "../general";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import {EVALUATOR_ROLE} from "../../configuration/constants";
 import axios from "axios";
@@ -47,9 +47,17 @@ const PersonalOffer = props => {
             <CardBody>
             {Array.isArray(response) && response.length > 0 
             ?
-                <ul>
-                {response.map((item, index)=>(<li key={index}><Link to={"/ideas/" + item.id}>{item.name}</Link></li>))}
-                </ul>
+                <Table width="100%">
+                    <TableBody>
+                    {response.map((item, index)=>(
+                        <TableRow key={index}>
+                            <DataCell>
+                                <Link to={"/ideas/" + item.id}>{item.name}</Link>
+                            </DataCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             :
                 <Paragraph>Uživatel nic nenabízí</Paragraph>
             }
@@ -62,7 +70,7 @@ const PersonalOffer = props => {
 }
 
 const AuthoredWorks = props => {
-    const {response, error, isLoading} = useFetch(process.env.REACT_APP_API_URL + "/works?authorId=" + props.id,{
+    const {response, error, isLoading} = useFetch(process.env.REACT_APP_API_URL + "/users/" + props.id + "/works",{
         method: "GET",
         headers: {
             Authorization: "Bearer " + props.accessToken,
@@ -84,9 +92,15 @@ const AuthoredWorks = props => {
             <CardBody>
             {Array.isArray(response) && response.length > 0 
             ?
-                <ul>
-                {response.map((item, index)=>(<li key={index}><Link to={"/works/" + item.id}>{item.name}</Link></li>))}
-                </ul>
+                <Table width="100%">
+                    <TableBody>
+                    {response.map((item, index)=>(
+                    <TableRow key={index}>
+                        <DataCell><Link to={"/works/" + item.id}>{item.name}</Link></DataCell>                    
+                    </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
             :
                 <Paragraph>Uživatel není autorem žádné práce</Paragraph>
             }

@@ -43,12 +43,12 @@ const ContentTable = props => {
                                 {item.name}
                                 <IconContainer>
                                     <EditMiniButton onClick={e => {props.setEditedRole(item.id); props.setContentMode(CONTENT_EDIT_ROLE)}} />
-                                    <RemoveMiniButton onClick={e => {setShowRoleDelete(item.id)}} />
+                                    {props.worksCount !== null && props.worksCount === 0 ? <RemoveMiniButton onClick={e => {setShowRoleDelete(item.id)}} /> : ""}
                                 </IconContainer>
                             </RoleContainer>
                         </HeadCell>
                     ))}
-                    <HeadCell horizontal="center"><AddMiniButton onClick={e => props.setContentMode(CONTENT_ADD_ROLE)} /></HeadCell>
+                    <HeadCell horizontal="center">{props.worksCount !== null && props.worksCount === 0 ? <AddMiniButton onClick={e => props.setContentMode(CONTENT_ADD_ROLE)} /> : "" }</HeadCell>
                 </TableRow>
             </TableHeader>
             <TableBody>

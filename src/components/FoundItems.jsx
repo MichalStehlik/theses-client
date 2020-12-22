@@ -17,6 +17,7 @@ const StyledFoundItem = styled(Link)`
     grid-template-columns: 50px auto;
     grid-template-areas: "icon name" "icon description";
     border: 1px solid white;
+    padding: 5px;
     margin-bottom: .2rem;
     color: white;
     text-decoration: none;
@@ -25,12 +26,14 @@ const StyledFoundItem = styled(Link)`
     }
 `;
 
-const StyledFoundItemIcon = styled.p`
+const StyledFoundItemIcon = styled.div`
     grid-area: icon;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    & > svg {
+        height: 1.3em;
+    }
 `;
 
 const StyledFoundItemName = styled.p`

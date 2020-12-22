@@ -4,6 +4,7 @@ import {useAppContext} from "../providers/ApplicationProvider";
 import NavigationLink from "./common/NavigationLink";
 import {ReactComponent as WorkIcon} from "../assets/icons/graduate.svg";
 import {ReactComponent as HomeIcon} from "../assets/icons/home3.svg";
+import {ReactComponent as SearchIcon} from "../assets/icons/search.svg";
 import {ReactComponent as IdeaIcon} from "../assets/icons/lightbulb.svg";
 import {ReactComponent as OverviewIcon} from "../assets/icons/table2.svg";
 import {ReactComponent as UserIcon} from "../assets/icons/user.svg";
@@ -80,7 +81,7 @@ const MainMenu = props => {
     const [{accessToken, profile}] = useAppContext();
     return (
     <StyledMainMenu>
-        <MainMenuItem to="/" exact icon={<HomeIcon />} text="Úvodní stránka" />
+        <MainMenuItem to="/" exact icon={<SearchIcon />} text="Vyhledávání" />
         <MainMenuItem to="/ideas" icon={<IdeaIcon />} text="Náměty" />
         <MainMenuItem to="/works" icon={<WorkIcon />} text="Práce" />
         <MainMenuItem to="/overviews" icon={<OverviewIcon />} text="Souhrny" />
