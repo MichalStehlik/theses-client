@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {useAppContext, ADD_MESSAGE} from "../../providers/ApplicationProvider";
 import {Loader, Paragraph, CardBody, CardFooter, Button, ButtonBlock } from "../general";
 import {LoadedUser } from "../common";
+import {useHistory} from "react-router-dom";
 import {ADMIN_ROLE, EVALUATOR_ROLE} from "../../configuration/constants";
 import axios from "axios";
 
@@ -11,6 +12,7 @@ const Offers = props => {
     const [ offered, setOffered ] = useState(false);
     const [ isLoading, setIsLoading ] = useState(true);
     const [ isEditable, setIsEditable ] = useState(true);
+    let history = useHistory();
 
     const fetchOffers = useCallback(() => {
         setIsLoading(true);
@@ -154,7 +156,7 @@ const Offers = props => {
             <ButtonBlock>
                 {offered ? <Button onClick={removeOffer}>Zrušení mé nabídky</Button> : <Button onClick={addOffer}>Nabídnout</Button>}
                 {(props.admin && (list.length > 0)) ? <Button onClick={removeAll}>Zrušení všech nabídek</Button> : ""}
-                <Button disabled>Vytvoření zadání práce</Button>
+                {(props.admin || props.evaluator) ? <Button onClick={e => {history.push("/works/create/" + props.id)}}>Vytvoření zadání práce</Button> : ""}
             </ButtonBlock>
         </CardFooter>
         : ""

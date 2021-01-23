@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import styled, {ThemeContext} from 'styled-components';
-import { PageTitle, Button } from "./general";
+import { PageTitle, Button, Loader } from "./general";
 import NavigationLink from "./common/NavigationLink";
 import {Link} from "react-router-dom";
 import {useAppContext, SET_TITLE} from "../providers/ApplicationProvider";
@@ -123,9 +123,11 @@ const Home = props => {
     const [ideasCount, setIdeasCount] = useState(0);
     const [worksCount, setWorksCount] = useState(0);
     const [usersCount, setUsersCount] = useState(0);
+    const [ isLoading, setIsLoading ] = useState(false);
     const themeContext = useContext(ThemeContext);
     useEffect(()=>{ dispatch({type: SET_TITLE, payload: "Úvodní stránka"}); },[dispatch]);
     useEffect(()=>{
+        setIsLoading(true);
         axios.get(process.env.REACT_APP_API_URL + "/search/stats",{
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -141,7 +143,8 @@ const Home = props => {
             setIdeasCount("?");
             setWorksCount("?");
             setUsersCount("?");
-        });
+        })
+        .then(()=>{setIsLoading(false)})
     },[accessToken]);
     return (
         <>
@@ -161,9 +164,16 @@ const Home = props => {
             <TitleBlock>
                 <FrontTitle>Dlouhodobé práce</FrontTitle>
                 <TitleMenu>
-                    <TitleMenuItem to="/ideas" text="Náměty" icon={<IdeaIcon />} count={ideasCount} />
-                    <TitleMenuItem to="/works" text="Práce" icon={<WorkIcon />} count={worksCount} />
-                    <TitleMenuItem to="/users" text="Uživatelé" icon={<UserIcon />} count={usersCount} />
+                    {isLoading 
+                    ? 
+                    <Loader />
+                    :    
+                    <>
+                        <TitleMenuItem to="/ideas" text="Náměty" icon={<IdeaIcon />} count={ideasCount} />
+                        <TitleMenuItem to="/works" text="Práce" icon={<WorkIcon />} count={worksCount} />
+                        <TitleMenuItem to="/users" text="Uživatelé" icon={<UserIcon />} count={usersCount} />
+                    </> 
+                    }                 
                 </TitleMenu>
                 {accessToken !== null && profile.theses_evaluator === "1" ?
                 <EvaluatorMenu>

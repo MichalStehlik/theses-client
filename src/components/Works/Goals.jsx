@@ -9,7 +9,6 @@ const Goals = props => {
     const [{accessToken, profile}, dispatch] = useAppContext();
     const [ list, setList ] = useState([]);
     const [ isLoading, setIsLoading ] = useState(true);
-    const [ isEditable, setIsEditable ] = useState(true);
 
     const fetchGoals = useCallback(() => {
         setIsLoading(true);
@@ -110,18 +109,6 @@ const Goals = props => {
     },[props.id, accessToken, dispatch, fetchGoals]);
 
     useEffect(()=>{ fetchGoals(); },[fetchGoals]);
-    useEffect(()=>{ 
-        setIsEditable(
-            (profile !== null) && (
-                (
-                    profile[ADMIN_ROLE] === "1" 
-                    || (profile.sub === props.authorId && props.data.state === 0) 
-                    || (profile.sub === props.managerId && props.data.state === 0)
-                    || (profile.sub === props.userId && props.data.state === 0)  
-                )
-            )
-        );
-     },[props.owner, profile]);
     return(
         <>
         <CardBody>
@@ -130,7 +117,7 @@ const Goals = props => {
         :
             <>
             <Paragraph>Cíle popisují vše, co v práci v době jejího odevzdání má být hotovo a odevzdáno.</Paragraph>
-            <DragItemsList items={list} editable={isEditable} addItemAction={addGoal} removeItemAction={removeGoal} updateItemAction={updateGoal} moveItemAction={moveGoal} itemType="goal" />
+            <DragItemsList items={list} editable={props.isEditable} addItemAction={addGoal} removeItemAction={removeGoal} updateItemAction={updateGoal} moveItemAction={moveGoal} itemType="goal" />
             </>
         }        
         </CardBody>

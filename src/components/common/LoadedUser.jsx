@@ -3,9 +3,9 @@ import User from "./User";
 import {useFetch, Loader } from "../general";
 import {useAppContext} from "../../providers/ApplicationProvider";
 
-const LoadedUser = props => {
+const LoadedUser = ({id, ...rest}) => {
     const [{accessToken}] = useAppContext();
-    const {response, error, isLoading} = useFetch(process.env.REACT_APP_API_URL + "/users/" + props.id,{
+    const {response, error, isLoading} = useFetch(process.env.REACT_APP_API_URL + "/users/" + id,{
         method: "GET",
         headers: accessToken !== null ? {
             Authorization: "Bearer " + accessToken,

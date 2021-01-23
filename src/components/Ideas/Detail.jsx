@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { CardContainer, Card, ActionLink, CardHeader, Subheading, Loader, Alert, PageTitle, Modal, Paragraph, Button } from "../general";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import axios from "axios";
-import {ADMIN_ROLE} from "../../configuration/constants";
+import {ADMIN_ROLE, EVALUATOR_ROLE} from "../../configuration/constants";
 import Edit from "./Edit";
 import Display from "./Display";
 import Targets from "./Targets";
@@ -67,7 +67,7 @@ export const Detail = props => {
             ?
             <Card>
                 <CardHeader><Subheading>Nabídka námětů a vytváření zadání</Subheading></CardHeader>
-                <Offers id={id} owner={response ? response.userId :  false} admin={(profile && profile[ADMIN_ROLE] === "1") ? true : false} />
+                <Offers id={id} owner={response ? response.userId :  false} admin={(profile && profile[ADMIN_ROLE] === "1") ? true : false} evaluator={(profile && profile[EVALUATOR_ROLE] === "1") ? true : false} />
             </Card>
             :
             ""

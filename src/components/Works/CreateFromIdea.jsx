@@ -1,24 +1,60 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { Formik, ErrorMessage } from 'formik';
-import { Alert, FormTextInput, FormGroup, FormSelect, Button, Label, Form, CardContainer, Card, ActionLink } from "../general";
-import {useHistory} from "react-router-dom";
+import { Formik } from 'formik';
+import { Alert, FormTextInput, FormSelect, Button, Form, CardContainer, Card, ActionLink, CardTypeValueList, CardTypeValueItem } from "../general";
+import { useHistory, useParams } from "react-router-dom";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
-import Axios from 'axios';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import Editor from '@ckeditor/ckeditor5-build-inline';
+import axios from 'axios';
 import requireAuth from "../Auth/requireAuth";
 
-export const Create = props => {
+export const CreateFromIdea = props => {
+    const { id } = useParams();
     const [{accessToken, profile}, dispatch] = useAppContext();
     const [failed, setFailed] = useState(false);
     const [ok, setOk] = useState(false);
     const [sets, setSets] = useState(null);
     const [authors, setAuthors] = useState(null);
     const [evaluators, setEvaluators] = useState(null);
+    const [idea, setIdea] = useState(null);
+    const [ideaGoals, setIdeaGoals] = useState(null);
+    const [ideaOutlines, setIdeaOutlines] = useState(null);
+    const fetchIdeaData = useCallback(() => {
+        axios.get(process.env.REACT_APP_API_URL + "/ideas/" + id,{
+            headers: {
+                Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            } 
+        })
+        .then(response => {
+            setIdea(response.data);
+        })
+    },[accessToken, id]);
+    const fetchIdeaGoalsData = useCallback(() => {
+        axios.get(process.env.REACT_APP_API_URL + "/ideas/" + id + "/goals",{
+            headers: {
+                Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            } 
+        })
+        .then(response => {
+            setIdeaGoals(response.data);
+        })
+    },[accessToken, id]);
+    const fetchIdeaOutlinesData = useCallback(() => {
+        axios.get(process.env.REACT_APP_API_URL + "/ideas/" + id + "/outlines",{
+            headers: {
+                Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            } 
+        })
+        .then(response => {
+            setIdeaOutlines(response.data);
+        })
+    },[accessToken, id]);
+
     let history = useHistory();
 
     const fetchSetsData = useCallback(() => {
-        Axios.get(process.env.REACT_APP_API_URL + "/sets?active=true",{
+        axios.get(process.env.REACT_APP_API_URL + "/sets?active=true",{
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json"
@@ -28,8 +64,9 @@ export const Create = props => {
             setSets(response.data.data);
         })
     },[accessToken]);
+
     const fetchAuthorsData = useCallback(() => {
-        Axios.get(process.env.REACT_APP_API_URL + "/users?author=true",{
+        axios.get(process.env.REACT_APP_API_URL + "/users?author=true",{
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json"
@@ -40,7 +77,7 @@ export const Create = props => {
         })
     },[accessToken]);
     const fetchEvaluatorsData = useCallback(() => {
-        Axios.get(process.env.REACT_APP_API_URL + "/users?evaluator=true",{
+        axios.get(process.env.REACT_APP_API_URL + "/users?evaluator=true",{
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json"
@@ -52,24 +89,35 @@ export const Create = props => {
     },[accessToken]);
 
     useEffect(()=>{ 
-        dispatch({type: SET_TITLE, payload: "Nová práce"});
+        dispatch({type: SET_TITLE, payload: "Nová práce z existujícího námětu"});
         setFailed(false);
         fetchSetsData();
         fetchAuthorsData();
         fetchEvaluatorsData();
+        fetchIdeaData();
+        fetchIdeaGoalsData();
+        fetchIdeaOutlinesData();
         setOk(false); 
     },[dispatch]);
     return (
         <>
-        <ActionLink to=".">Seznam</ActionLink>
+        <ActionLink to="/works">Seznam</ActionLink>
         <CardContainer>
             <Card>
+            {idea && ideaGoals && ideaOutlines
+            ?
+            <CardTypeValueList style={{padding: ".5em"}}>
+                <CardTypeValueItem type="Námět" value={idea.name} />
+                <CardTypeValueItem type="Popis" value={<span dangerouslySetInnerHTML={{__html: idea.description }} />} />
+                <CardTypeValueItem type="Předmět" value={idea.subject} />
+                <CardTypeValueItem type="Počet cílů" value={Array.isArray(ideaGoals) ? ideaGoals.length : 0} />
+                <CardTypeValueItem type="Počet bodů osnovy" value={Array.isArray(ideaOutlines) ? ideaOutlines.length : 0} />
+            </CardTypeValueList>
+            :           
+            <Alert text="Data námětu nejsou správně načtená." variant="warning" />
+            }
             <Formik
             initialValues={{
-                name: "",
-                description: "",
-                resources: "",
-                subject: "",
                 classname: "",
                 repositoryURL: "",
                 authorid: "",
@@ -78,10 +126,6 @@ export const Create = props => {
             }}
             validate={values=>{
                 let errors = {};
-                if (!values.name) errors.name = "Vyplňte název námětu";
-                if (!values.description) errors.description = "Vyplňte popis námětu";
-                if (!values.subject) errors.subject = "Vyplňte předmět, kam námět spadá";
-                if (!values.description) errors.description = "Vyplňte popis námětu";
                 if (!values.classname) errors.classname = "Vyplňte třídu autora";
                 if (!values.setid) errors.setid = "Práce musí být v aktivní sadě";
                 if (!values.authorid) errors.authorid = "Práce musí mít autora";
@@ -90,11 +134,11 @@ export const Create = props => {
             }}
             onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
-                Axios.post(process.env.REACT_APP_API_URL + "/works", {
-                    Name: values.name,
-                    Description: values.description,
-                    Subject: values.subject,
-                    Resources: values.resources,
+                axios.post(process.env.REACT_APP_API_URL + "/works", {
+                    Name: idea.name,
+                    Description: idea.description,
+                    Subject: idea.subject,
+                    Resources: idea.resources,
                     ClassName: values.classname,
                     RepositoryURL: values.repositoryURL,
                     AuthorId: values.authorid,
@@ -109,9 +153,10 @@ export const Create = props => {
                     }
                 })
                 .then(response => {
+                    console.log(response.data);
+                    let workId = response.data.id;
                     setOk(true);
                     setFailed(false);
-                    history.push("/works/" + response.data.id);
                 })
                 .catch(error => {
                     if (error.response)
@@ -133,27 +178,6 @@ export const Create = props => {
                 <Form>
                     {(failed !== false) ? <Alert text={"Uložení práce se nepodařilo. (" + failed + ")"}  variant="error" /> : ""}
                     {(ok !== false) ? <Alert text={"Uložení práce se podařilo."}  variant="success" /> : ""}
-                    <FormTextInput name="name" label="Název" placeholder="Neviditelné perpetuum mobile" />
-                    <FormTextInput name="subject" label="Zkratka předmětu nebo předmětů, kam práce spadá" placeholder="FYZ" />
-                    <FormGroup>
-                        <Label htmlFor="description">Téma</Label>
-                        <CKEditor
-                            editor={ Editor }
-                            data={values.description}
-                            config={{toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ], placeholder: "Práce se zabývá vytvořením stroje vykonajícího práci bez vnějšího zdroje energie způsobem, jaký svět zatím nikdy neviděl."}}
-                            onInit={ editor => {  } }
-                            onChange={ ( event, editor ) => {
-                                const data = editor.getData();
-                                setFieldValue("description", data, true);
-                            } }
-                            onBlur={ ( event, editor ) => {
-                            } }
-                            onFocus={ ( event, editor ) => {
-                            } }
-                        />
-                        <ErrorMessage name="description">{msg => <Alert variant="error" text={msg} />}</ErrorMessage>
-                    </FormGroup>
-                    <FormTextInput name="resources" label="Prostředky" placeholder="Kruhová klícka, křeček, zrní, černé plátno, funkční kouzelná hůlka" />
                     <FormTextInput name="classname" label="Třída" placeholder="L4" />
                     <FormTextInput name="repositoryURL" label="Odkaz na repozitář" placeholder="https://github.com" />
                     <FormSelect name="authorid" label="Autor" placeholder="xxxxxxxx">
@@ -169,7 +193,7 @@ export const Create = props => {
                         {Array.isArray(sets) ? sets.map((item,index) => (<option key={index} value={item.id}>{item.name}</option>)) : ""}
                     </FormSelect>
                     <div>
-                        <Button type="submit" variant="primary" disabled={!((dirty && isValid) || isSubmitting)}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>
+                        <Button type="submit" variant="primary" disabled={!((dirty && isValid && idea) || isSubmitting)}>{!isSubmitting ? "Uložit" : "Pracuji"}</Button>
                         <Button onClick={()=>{history.push("/works")}}>Zpět</Button>
                     </div>
                 </Form>
@@ -181,4 +205,4 @@ export const Create = props => {
     );
 };
 
-export default requireAuth(Create);
+export default requireAuth(CreateFromIdea);
