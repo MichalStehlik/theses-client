@@ -10,6 +10,7 @@ import {ReactComponent as UserIcon} from "../assets/icons/user.svg";
 import {ReactComponent as IdeaIcon} from "../assets/icons/lightbulb.svg";
 import {ReactComponent as WorkIcon} from "../assets/icons/graduate.svg";
 import axios from "axios";
+import {mainTheme as theme} from "../App";
 
 const TopPanel = styled.div`
     display: flex;
@@ -166,7 +167,7 @@ const Home = props => {
                 <TitleMenu>
                     {isLoading 
                     ? 
-                    <Loader />
+                    <Loader size="40px" normal={theme.colors.logoForeground} accent={theme.colors.logoBackground} />
                     :    
                     <>
                         <TitleMenuItem to="/ideas" text="Náměty" icon={<IdeaIcon />} count={ideasCount} />

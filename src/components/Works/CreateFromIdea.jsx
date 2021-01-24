@@ -153,7 +153,6 @@ export const CreateFromIdea = props => {
                     }
                 })
                 .then(response => {
-                    console.log(response.data);
                     let workId = response.data.id;
                     setOk(true);
                     setFailed(false);

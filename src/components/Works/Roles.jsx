@@ -19,6 +19,14 @@ width: 100%;
 justify-content: space-between;
 `;
 
+const CenteredContent = styled.nav`
+display: flex;
+flex-direction: row;
+width: 100%;
+justify-content: start;
+padding: .5em;
+`;
+
 const UserInRole = ({userId, removeUserAction}) => {
     return (
         <StyledUserInRole>
@@ -203,9 +211,30 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
                 </TableHeader>
             </Table>
         </TableWrapper>
-        <div>
-            <a href={process.env.REACT_APP_API_URL + "/works/" + id + "/application"} target="_blank">Přihláška</a>
-        </div>
+        <CenteredContent>
+            <Button onClick={e => {
+                axios({
+                    url: process.env.REACT_APP_API_URL + "/works/" + id + "/application",
+                    method: 'GET',
+                    responseType: 'blob',
+                    headers: {
+                        Authorization: "Bearer " + accessToken,
+                        "Content-Type": "text/html"
+                    } 
+                  }).then((response) => {
+                        let fileContent = new Blob([response.data]);
+                        const url = window.URL.createObjectURL(fileContent);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'prihlaska.html');
+                        document.body.appendChild(link);
+                        link.click();
+                        dispatch({type: ADD_MESSAGE, text: "Přihláška byla uložena.", variant: "success", dismissible: true, expiration: 3});
+                  }).catch((error)=>{
+                        dispatch({type: ADD_MESSAGE, text: "Při získávání přihlášky došlo k chybě.", variant: "error", dismissible: true, expiration: 3});
+                  })
+            }}>Přihláška</Button>
+        </CenteredContent>
         </>
     );
 }

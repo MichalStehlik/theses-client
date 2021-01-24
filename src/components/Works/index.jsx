@@ -11,7 +11,7 @@ import MessageLayout from "../layouts/MessageLayout";
 import {mainTheme as theme} from "../../App";
 import requireAuth from "../Auth/requireAuth";
 
-const Ideas = props => {
+const Works = props => {
     return (
         <Switch>
             <Route exact path="/works" component={List} />
@@ -24,4 +24,4 @@ const Ideas = props => {
     );
 }
 
-export default requireAuth(Ideas);
+export default requireAuth(Works);
