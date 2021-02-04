@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {useHistory} from "react-router-dom";
 import { Alert, ActionLink } from "../general";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
-import requireAuth from "../Auth/requireAuth";
+import requireEvaluator from "../Auth/requireEvaluator";
 import Axios from 'axios';
 
 export const Guide = props => {
@@ -56,4 +56,4 @@ export const Guide = props => {
     );
 };
 
-export default requireAuth(Guide);
+export default requireEvaluator(Guide);

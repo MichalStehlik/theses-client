@@ -73,18 +73,19 @@ const Display = props => {
                     setIsDeleting(true);
                     axios.delete(process.env.REACT_APP_API_URL + "/works/" + props.data.id, {headers: { Authorization: "Bearer " + accessToken, "Content-Type": "application/json" }})
                     .then(response => {
-                        dispatch({type: ADD_MESSAGE, text: "Práce byla smazána.", variant: "success", dismissible: true});
+                        dispatch({type: ADD_MESSAGE, text: "Práce byla smazána.", variant: "success", dismissible: true, expiration: 3});
                         history.push("/works");
                     })
                     .catch(error => {
                         if (error.response)
                         {
-                            dispatch({type: ADD_MESSAGE, text: "Smazání práce se nepodařilo. (" + error.response.status + ")", variant: "error", dismissible: true});
+                            dispatch({type: ADD_MESSAGE, text: "Smazání práce se nepodařilo. (" + error.response.status + ")", variant: "error", dismissible: true, expiration: 3});
                         }
                         else
                         {
-                            dispatch({type: ADD_MESSAGE, text: "Smazání práce se nepodařilo.", variant: "error", dismissible: true});
+                            dispatch({type: ADD_MESSAGE, text: "Smazání práce se nepodařilo.", variant: "error", dismissible: true, expiration: 3});
                         }
+                        props.fetchData();
                     })
                     .then(()=>{
                         setIsDeleting(false);

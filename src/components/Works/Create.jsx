@@ -6,7 +6,7 @@ import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import Axios from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-inline';
-import requireAuth from "../Auth/requireAuth";
+import requireEvaluator from "../Auth/requireEvaluator";
 
 export const Create = props => {
     const [{accessToken, profile}, dispatch] = useAppContext();
@@ -181,4 +181,4 @@ export const Create = props => {
     );
 };
 
-export default requireAuth(Create);
+export default requireEvaluator(Create);

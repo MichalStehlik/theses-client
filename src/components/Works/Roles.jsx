@@ -4,6 +4,7 @@ import {Loader, Paragraph, CardBody, Table, TableHeader, TableBody, TableRow, Ta
 import {ADMIN_ROLE, EVALUATOR_ROLE} from "../../configuration/constants";
 import {SHOW_ROLES, INVITE_ROLES, ASSIGN_ROLES} from "./Detail";
 import LoadedUser from "../common/LoadedUser";
+import DateTime from "../common/DateTime";
 import axios from "axios";
 import styled from 'styled-components';
 
@@ -27,16 +28,16 @@ justify-content: start;
 padding: .5em;
 `;
 
-const UserInRole = ({userId, removeUserAction}) => {
+const UserInRole = ({userId, removeUserAction, isEditable}) => {
     return (
         <StyledUserInRole>
             <LoadedUser id={userId} />
-            <RemoveMiniButton onClick={e => removeUserAction()} />
+            {isEditable ? <RemoveMiniButton onClick={e => removeUserAction()} /> : "" }
         </StyledUserInRole>
     )   
 }
 
-const UsersInRole = ({work, role, setEditedRole, switchMode, accessToken, removeUserAction, fetchAction}) => {
+const UsersInRole = ({work, role, setEditedRole, switchMode, accessToken, removeUserAction, fetchAction, isEditable}) => {
     const [users, setUsers] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -81,15 +82,19 @@ const UsersInRole = ({work, role, setEditedRole, switchMode, accessToken, remove
                 {Array.isArray(users) 
                 ?
                 users.map((item,index)=>(
-                    <UserInRole key={index} userId={item.id} removeUserAction={e => {removeUserAction(work, role.id, item.id); fetchAction();}} />
+                    <UserInRole key={index} userId={item.id} removeUserAction={e => {removeUserAction(work, role.id, item.id); fetchAction();}} isEditable={isEditable} />
                 ))
                 : 
                 ""
                 }
-                <AddMiniButton onClick={e => {
-                    setEditedRole(role.id);
-                    switchMode(ASSIGN_ROLES);
-                }} />
+                {isEditable ?
+                    <AddMiniButton onClick={e => {
+                        setEditedRole(role.id);
+                        switchMode(ASSIGN_ROLES);
+                }}  />
+                :
+                ""
+                }
             </StyledUsersInRole>
         ) 
     }
@@ -99,14 +104,17 @@ const UsersInRole = ({work, role, setEditedRole, switchMode, accessToken, remove
     }
 }
 
-const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
+const Roles = ({id, owner, switchMode, editedRole, setEditedRole, isEditable, workData, ...rest}) => {
     const [{accessToken, profile}, dispatch] = useAppContext();
-    const [response, setResponse] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [rolesResponse, setRolesResponse] = useState(null);
+    const [isRolesLoading, setIsRolesLoading] = useState(false);
+    const [rolesError, setRolesError] = useState(false);
+    const [termsResponse, setTermsResponse] = useState(null);
+    const [isTermsLoading, setIsTermsLoading] = useState(false);
+    const [termsError, setTermsError] = useState(false);
     const fetchData = useCallback(() => {
-        setIsLoading(true);
-        setError(false);
+        setIsRolesLoading(true);
+        setRolesError(false);
         axios.get(process.env.REACT_APP_API_URL + "/works/" + id + "/roles",{
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -114,20 +122,44 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
             } 
         })
         .then(response => {
-            setResponse(response.data);
+            setRolesResponse(response.data);
         })
         .catch(error => {
             if (error.response) {
-                setError({status: error.response.status, text: error.response.statusText});
+                setRolesError({status: error.response.status, text: error.response.statusText});
             }
             else
             {
-                setError({status: 0, text: "Neznámá chyba"});
+                setRolesError({status: 0, text: "Neznámá chyba"});
             }         
-            setResponse([]);
+            setRolesResponse([]);
         });
-        setIsLoading(false);
+        setIsRolesLoading(false);
     },[accessToken, id]);
+    const fetchTerms = useCallback(() => {
+        setIsTermsLoading(true);
+        setTermsError(false);
+        axios.get(process.env.REACT_APP_API_URL + "/sets/" + workData.setId + "/terms",{
+            headers: {
+                Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            } 
+        })
+        .then(response => {
+            setTermsResponse(response.data);
+        })
+        .catch(error => {
+            if (error.response) {
+                setTermsError({status: error.response.status, text: error.response.statusText});
+            }
+            else
+            {
+                setTermsError({status: 0, text: "Neznámá chyba"});
+            }         
+            setTermsResponse([]);
+        });
+        setIsTermsLoading(false);
+    },[accessToken, id, workData]);
     const removeUser = useCallback((work, role, user) => {
         axios.delete(process.env.REACT_APP_API_URL + "/works/" + work + "/roles/" + role + "/users/" + user,{
             headers: {
@@ -144,21 +176,22 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
     },[accessToken, id]);
     useEffect(()=>{
         fetchData();
+        fetchTerms();
     },[accessToken]);
 
     const showRoles = () => {
-        if (isLoading) {
+        if (isRolesLoading || isTermsLoading) {
             return (
                 <HeadCell colSpan="1000"><Loader /></HeadCell>
             );
         }          
-        else if (error) {
+        else if (rolesError || termsError) {
             return (
-                <HeadCell colSpan="1000"><Alert text="Při získávání seznamu rolí došlo k chybě." /></HeadCell>
+                <HeadCell colSpan="1000"><Alert text="Při získávání seznamu rolí nebo termínů došlo k chybě." /></HeadCell>
             );
-        } else if (response) {
+        } else if (rolesResponse && termsResponse) {
             return (
-                response.map((item,index)=>(
+                rolesResponse.map((item,index)=>(
                     <HeadCell key={index}>{item.setRole.name}</HeadCell>
                 ))
             );
@@ -170,20 +203,20 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
     }
 
     const showAssignedRoles = () => {
-        if (isLoading) {
+        if (isRolesLoading) {
             return (
                 <HeadCell colSpan="1000"><Loader /></HeadCell>
             );
         }          
-        else if (error) {
+        else if (rolesError) {
             return (
-                <HeadCell colSpan="1000"><Alert text="Při získávání seznamu obsazení rolí došlo k chybě." /></HeadCell>
+                <HeadCell colSpan="1000"><Alert text="Při získávání seznamu obsazení rolí došlo k chybě." variant="error" /></HeadCell>
             );
-        } else if (response) {
+        } else if (rolesResponse) {
             return (
-                response.map((item,index)=>(
+                rolesResponse.map((item,index)=>(
                     <DataCell key={index}>
-                        <UsersInRole work={id} role={item} switchMode={switchMode} setEditedRole={setEditedRole} accessToken={accessToken} removeUserAction={removeUser} fetchAction={fetchData} />
+                        <UsersInRole work={id} role={item} switchMode={switchMode} setEditedRole={setEditedRole} accessToken={accessToken} removeUserAction={removeUser} fetchAction={fetchData} isEditable={isEditable} />
                     </DataCell>
                 ))
             );
@@ -196,7 +229,9 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
 
     return (
         <>
-        <CardHeader><Subheading>Role a hodnocení</Subheading></CardHeader>
+        <CardHeader>
+            <Subheading>Role</Subheading>
+        </CardHeader>
         <TableWrapper>
             <Table width="100%">
                 <TableHeader>
@@ -209,8 +244,34 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
                         {showAssignedRoles()}
                     </TableRow>
                 </TableHeader>
+                <TableBody>
+                {
+                Array.isArray(termsResponse)
+                ?
+                termsResponse.map((item, index) => (
+                    <TableRow key={index}>
+                        <HeadCell>{item.name}</HeadCell>
+                        <DataCell colSpan="9999"><DateTime date={item.date} /></DataCell>
+                    </TableRow>
+                ))
+                :
+                ""
+                }
+                </TableBody>
             </Table>
         </TableWrapper>
+        {
+            (profile !== null) && (
+                (
+                    profile[ADMIN_ROLE] === "1" 
+                    || (profile.sub === workData.authorId)
+                    || (profile.sub === workData.managerId)
+                    || (profile.sub === workData.userId)  
+                )
+            )
+            ?
+        <CardBody>
+        <Subheading>Přihlášky a hodnocení</Subheading>
         <CenteredContent>
             <Button onClick={e => {
                 axios({
@@ -235,6 +296,10 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, ...rest}) => {
                   })
             }}>Přihláška</Button>
         </CenteredContent>
+        </CardBody>
+        :
+        ""
+        }
         </>
     );
 }

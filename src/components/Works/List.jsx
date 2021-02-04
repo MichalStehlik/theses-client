@@ -12,7 +12,7 @@ const List = props => {
     const [data, setData] = useState([]);
     const [setsData, setSetsData] = useState({});
     const [totalPages, setTotalPages] = useState(0);
-    const [{accessToken}, dispatch] = useAppContext();
+    const [{accessToken, profile}, dispatch] = useAppContext();
 
     useEffect(()=>{ 
       dispatch({type: SET_TITLE, payload: "Seznam prací"}); 

@@ -4,7 +4,7 @@ import { Alert, FormTextInput, FormSelect, Button, Form, CardContainer, Card, Ac
 import { useHistory, useParams } from "react-router-dom";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import axios from 'axios';
-import requireAuth from "../Auth/requireAuth";
+import requireEvaluator from "../Auth/requireEvaluator";
 
 export const CreateFromIdea = props => {
     const { id } = useParams();
@@ -154,8 +154,25 @@ export const CreateFromIdea = props => {
                 })
                 .then(response => {
                     let workId = response.data.id;
+                    let goalsTexts = ideaGoals.map((item) => (item.text));
+                    axios.post(process.env.REACT_APP_API_URL + "/works/" + workId + "/goals/all", goalsTexts
+                    , {
+                        headers: {
+                            Authorization: "Bearer " + accessToken,
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    let outlinesTexts = ideaOutlines.map((item) => (item.text));
+                    axios.post(process.env.REACT_APP_API_URL + "/works/" + workId + "/outlines/all", outlinesTexts
+                    , {
+                        headers: {
+                            Authorization: "Bearer " + accessToken,
+                            "Content-Type": "application/json"
+                        }
+                    });
                     setOk(true);
                     setFailed(false);
+                    history.push("/works/" + workId);
                 })
                 .catch(error => {
                     if (error.response)
@@ -204,4 +221,4 @@ export const CreateFromIdea = props => {
     );
 };
 
-export default requireAuth(CreateFromIdea);
+export default requireEvaluator(CreateFromIdea);

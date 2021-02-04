@@ -12,6 +12,7 @@ import Costs from "./Costs";
 import EditCosts from "./EditCosts";
 import Roles from "./Roles";
 import AddRole from "./AddRole";
+import State from "./State";
 
 export const SHOW_ROLES = 0;
 export const ASSIGN_ROLES = 1;
@@ -32,7 +33,7 @@ export const Detail = props => {
     const showRoles = () => {
         switch (rolesMode)
         {
-            case SHOW_ROLES: return <Roles id={id} owner={response ? response.userId :  false} switchMode={setRolesMode} editedRole={editedRole} setEditedRole={setEditedRole} isEditable={isEditable} />;
+            case SHOW_ROLES: return <Roles id={id} owner={response ? response.userId :  false} switchMode={setRolesMode} editedRole={editedRole} setEditedRole={setEditedRole} isEditable={isEditable} work={id} workData={response} />;
             case ASSIGN_ROLES: return <AddRole id={id} owner={response ? response.userId :  false} switchMode={setRolesMode} editedRole={editedRole} setEditedRole={setEditedRole} evaluators={evaluators} work={id} fetchData={fetchData} isEditable={isEditable} />;
         }
     }
@@ -84,7 +85,7 @@ export const Detail = props => {
             (profile !== null) && (
                 (
                     profile[ADMIN_ROLE] === "1" 
-                    || (profile.sub === props.authorId && props.data.state === 0) 
+                    /*|| (profile.sub === props.authorId && props.data.state === 0)*/ 
                     || (profile.sub === props.managerId && props.data.state === 0)
                     || (profile.sub === props.userId && props.data.state === 0)  
                 )
@@ -107,7 +108,7 @@ export const Detail = props => {
         <PageTitle>{response.name}</PageTitle>
         <CardContainer>
             <Card>
-                {editing ? <Edit data={response} id={id} owner={response ? response.userId :  false} switchEditMode={setEditing} fetchData={fetchData} /> : <Display data={response} isEditable={isEditable} switchEditMode={setEditing} />}
+                {editing ? <Edit data={response} id={id} owner={response ? response.userId :  false} switchEditMode={setEditing} fetchData={fetchData} /> : <Display data={response} isEditable={isEditable} switchEditMode={setEditing} fetchData={fetchData} />}
             </Card>
             <Card>
                 {showRoles()}
@@ -119,11 +120,16 @@ export const Detail = props => {
             <Card>
                 <CardHeader><Subheading>Osnova</Subheading></CardHeader>
                 <Outlines id={id} owner={response ? response.userId :  false} isEditable={isEditable} />
-            </Card>    
+            </Card>
+            { profile[ADMIN_ROLE] === "1" || (profile.sub === props.managerId && props.data.state === 0)
+            ?    
             <Card>
                 <CardHeader><Subheading>Stav práce</Subheading></CardHeader>
-                {/* <Outlines id={id} owner={response ? response.userId :  false} />*/}  
-            </Card> 
+                <State id={id} owner={response ? response.userId :  false} isEditable={isEditable} data={response} fetchData={fetchData} />
+            </Card>
+            : 
+            ""
+            } 
             <Card>
             {editingCosts ? <EditCosts data={response} id={id} isEditable={isEditable} owner={response ? response.userId :  false} switchEditMode={setEditingCosts} fetchData={fetchData} /> : <Costs data={response} owner={response ? response.userId :  false} switchEditMode={setEditingCosts} />}
             </Card>    
