@@ -38,6 +38,8 @@ const List = props => {
         {Header: "Jméno", accessor: "authorFirstName"},
         {Header: "Příjmení", accessor: "authorLastName"},
         {Header: "Třída", accessor: "className"},
+        {Header: "Jméno manažera", accessor: "managerFirstName"},
+        {Header: "Příjmení manažera", accessor: "managerLastName"},
         {Header: "Rok", accessor: "year"},
         {Header: "Sada", accessor: "setName", disableSortBy: true, Filter: (column) => {return ListColumnFilter(column, setsData)}},
         {Header: "Stav", accessor: "state", Cell: data => (WorkStates[data.cell.value]), Filter: (column) => {return ListColumnFilter(column, WorkStates)}},
@@ -64,6 +66,8 @@ const List = props => {
                 case "userId": parameters.push("userId=" + f.value); break;
                 case "authorFirstName": parameters.push("firstname=" + f.value); break;
                 case "authorLastName": parameters.push("lastname=" + f.value); break;
+                case "managerFirstName": parameters.push("firstname=" + f.value); break;
+                case "managerLastName": parameters.push("lastname=" + f.value); break;
                 case "setName": parameters.push("setId=" + f.value); break;
                 case "state": parameters.push("state=" + f.value); break;
                 case "year": parameters.push("year=" + f.value); break;

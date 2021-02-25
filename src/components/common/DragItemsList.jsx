@@ -15,7 +15,7 @@ flex-direction: column;
 justify-content: space-between;
 `;
 const StyledDragItem = styled.li`
-cursor: ${props => props.editable === true ? "move" : "default"};
+cursor: ${props => (props.editable === true && props.globalEditing === false) ? "move" : "default"};
 border-top: 1px solid #bbb;
 margin-bottom: .5rem;
 display: flex;
@@ -95,6 +95,7 @@ const DragItem = props => {
     const [ , drop ] = useDrop({
         accept: props.itemType,
         hover(item, monitor) {
+            if (props.globalEditing) return;
             if (!ref.current) return;
 			const dragIndex = item.index;
             const hoverIndex = props.index;
@@ -122,20 +123,22 @@ const DragItem = props => {
     drag(drop(ref));
     if (isEditing) {
         return (
-            <StyledDragItem style={opacity}>
+            <StyledDragItem style={{opacity: opacity}}>
                 <StyledDragItemWrapper>
                     <StyledDragItemContent>
-                    <Input autoFocus value={editedText} onChange={e => setEditedText(e.target.value)} onBlur={e=>{if (editedText === text) setIsEditing(false);}} onKeyDown={
+                    <Input autoFocus value={editedText} onChange={e => setEditedText(e.target.value)} onBlur={e=>{if (editedText === text) setIsEditing(false); props.setGlobalEditing(false);}} onKeyDown={
                         e => {
                             if (e.key === "Enter") 
                             {
                                 setText(editedText); 
                                 setIsEditing(false); 
+                                props.setGlobalEditing(false);
                                 props.updateItemAction(props.order, editedText);
                             } 
                             else if (e.key === "Escape")
                             {
-                                setIsEditing(false); 
+                                setIsEditing(false);
+                                props.setGlobalEditing(false); 
                             }
                         }
                     } />
@@ -143,8 +146,8 @@ const DragItem = props => {
                     {props.editable 
                     ?
                         <StyledDragItemIcons>
-                            <YesMiniButton onClick={(e) => {setText(editedText); setIsEditing(false); props.updateItemAction(props.order, editedText);}} />
-                            <CancelMiniButton onClick={(e) => {setIsEditing(false);}} />
+                            <YesMiniButton onClick={(e) => {setText(editedText); setIsEditing(false); props.setGlobalEditing(false); props.updateItemAction(props.order, editedText);}} />
+                            <CancelMiniButton onClick={(e) => {setIsEditing(false); props.setGlobalEditing(false);}} />
                         </StyledDragItemIcons>
                     :
                     ""
@@ -156,7 +159,11 @@ const DragItem = props => {
     else
     {
         return (
-            <StyledDragItem ref={props.editable ? ref : null} onDoubleClick={(e) => {if(props.editable) {setEditedText(text);setIsEditing(true);}}} {...props}>
+            <StyledDragItem ref={(props.editable /*&& !props.globalEditing*/) ? ref : null} onDoubleClick={(e) => {if(props.editable) {
+                    setEditedText(text);
+                    setIsEditing(true);
+                    props.setGlobalEditing(true);
+                }}} {...props}>
                 <StyledDragItemWrapper>
                     <StyledDragItemContent>
                     {text}
@@ -164,7 +171,7 @@ const DragItem = props => {
                     {props.editable 
                     ?
                     <StyledDragItemIcons>
-                        <EditMiniButton onClick={(e) => {setEditedText(text);setIsEditing(true);}} />
+                        <EditMiniButton onClick={(e) => {setEditedText(text); setIsEditing(true); props.setGlobalEditing(true);}} />
                         <DeleteMiniButton onClick={(e) => {props.removeItemAction(props.order);}} />
                         <DownMiniButton disabled={props.order === props.count} onClick={(e) => {if (props.order < props.count) props.moveItemAction(props.order, props.order + 1);}} />
                         <UpMiniButton disabled={props.order === 1} onClick={(e) => {if (props.order > 1) props.moveItemAction(props.order, props.order - 1);}} />
@@ -197,6 +204,7 @@ const AddItemPanel = props => {
 
 const DragItemsContainer = ({items, editable, removeItemAction, updateItemAction, moveItemAction, itemType, ...rest}) => {
     const [ collection, setCollection ] = useState(items);
+    const [ globalEditing, setGlobalEditing ] = useState(false);
     useEffect(()=>{setCollection(items)},[items])
     const movingItem = useCallback(
         (dragIndex, hoverIndex) => {
@@ -210,6 +218,7 @@ const DragItemsContainer = ({items, editable, removeItemAction, updateItemAction
     if (Array.isArray(collection) && (collection.length > 0))
     {
         return (
+            <>
             <StyledDragItemsContainer {...rest}>
             {collection.map((item, index) => (
             <DragItem 
@@ -224,8 +233,11 @@ const DragItemsContainer = ({items, editable, removeItemAction, updateItemAction
                 editable={editable} 
                 itemType={itemType}
                 count={collection.length}
+                globalEditing={globalEditing}
+                setGlobalEditing={setGlobalEditing}
             />))}
             </StyledDragItemsContainer>
+            </>
         );
     }
     else

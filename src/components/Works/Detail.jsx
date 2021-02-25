@@ -85,7 +85,7 @@ export const Detail = props => {
             (profile !== null) && (
                 (
                     profile[ADMIN_ROLE] === "1" 
-                    /*|| (profile.sub === props.authorId && props.data.state === 0)*/ 
+                    || (profile.sub === props.userId && props.data.state === 0)
                     || (profile.sub === props.managerId && props.data.state === 0)
                     || (profile.sub === props.userId && props.data.state === 0)  
                 )
@@ -121,7 +121,7 @@ export const Detail = props => {
                 <CardHeader><Subheading>Osnova</Subheading></CardHeader>
                 <Outlines id={id} owner={response ? response.userId :  false} isEditable={isEditable} />
             </Card>
-            { profile[ADMIN_ROLE] === "1" || (profile.sub === props.managerId && props.data.state === 0)
+            { profile[ADMIN_ROLE] === "1" || (profile.sub === props.managerId && props.data.state === 0) || (profile.sub === props.userId && props.data.state === 0)
             ?    
             <Card>
                 <CardHeader><Subheading>Stav práce</Subheading></CardHeader>

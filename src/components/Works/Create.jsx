@@ -156,11 +156,22 @@ export const Create = props => {
                     <FormTextInput name="resources" label="Prostředky" placeholder="Kruhová klícka, křeček, zrní, černé plátno, funkční kouzelná hůlka" />
                     <FormTextInput name="classname" label="Třída" placeholder="L4" />
                     <FormTextInput name="repositoryURL" label="Odkaz na repozitář" placeholder="https://github.com" />
+                    <Button size="9px" onClick={e=>{
+                        let foundSet = sets.find(s=>s.id == values.setid);
+                        let set = foundSet !== undefined ? foundSet.name : "";
+                        set = set.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g,"-");
+                        let foundAuthor = authors.find(a=>a.id == values.authorid);
+                        let author = foundAuthor !== undefined ? foundAuthor.name : "";
+                        author = author.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g,"-");
+                        let name = values.name.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g,"-");
+                        setFieldValue("repositoryURL","https://github.com/pslib-cz/" + set + "_" + author + "_" + name);
+                        e.preventDefault();
+                    }}>Vygenerovat název repozitáře</Button>
                     <FormSelect name="authorid" label="Autor" placeholder="xxxxxxxx">
                     <option></option>
                         {Array.isArray(authors) ? authors.map((item,index) => (<option key={index} value={item.id}>{item.name + " (" + item.email + ")"}</option>)) : ""}
                     </FormSelect>
-                    <FormSelect name="managerid" label="Vedoucí" placeholder="xxxxxxxxx">
+                    <FormSelect name="managerid" label="Manažer práce" placeholder="xxxxxxxxx">
                         <option></option>
                         {Array.isArray(evaluators) ? evaluators.map((item,index) => (<option key={index} value={item.id}>{item.name + " (" + item.email + ")"}</option>)) : ""}
                     </FormSelect>

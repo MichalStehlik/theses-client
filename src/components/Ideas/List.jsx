@@ -74,8 +74,8 @@ const List = props => {
                 case "name": parameters.push("name=" + f.value); break;
                 case "subject": parameters.push("subject=" + f.value); break;
                 case "userId": parameters.push("userId=" + f.value); break;
-                case "firstname": parameters.push("firstname=" + f.value); break;
-                case "lastname": parameters.push("lastname=" + f.value); break;
+                case "userFirstName": parameters.push("firstname=" + f.value); break;
+                case "userLastName": parameters.push("lastname=" + f.value); break;
                 case "offered": parameters.push("offered=" + f.value); break;
                 case "targets": parameters.push("target=" + f.value); break;
                 default: break;

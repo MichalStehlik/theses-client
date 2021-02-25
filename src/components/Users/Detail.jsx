@@ -112,6 +112,49 @@ const AuthoredWorks = props => {
     };  
 }
 
+const AuthoredIdeas = props => {
+    const {response, error, isLoading} = useFetch(process.env.REACT_APP_API_URL + "/users/" + props.id + "/ideas",{
+        method: "GET",
+        headers: {
+            Authorization: "Bearer " + props.accessToken,
+            "Content-Type": "application/json"
+        }
+    });
+    if (isLoading) {
+        return <Loader size="2em"/>;
+    } else if (error !== false) {
+        switch (error.status)
+        {
+            case 400: return <Alert text={"Nesprávný formát identifikátoru uživatele nebo jiná chyba požadavku"} variant="error"/>;
+            case 404: return <Alert text={"Neznámý uživatel"} variant="error"/>;
+            default: return <Alert text={error.text + " (" + error.status + ")"} variant="error"/>;
+        }        
+    } else if (response) {
+        return (
+            <>
+            <CardBody>
+            {Array.isArray(response) && response.length > 0 
+            ?
+                <Table width="100%">
+                    <TableBody>
+                    {response.map((item, index)=>(
+                    <TableRow key={index}>
+                        <DataCell><Link to={"/ideas/" + item.id}>{item.name}</Link></DataCell>                    
+                    </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            :
+                <Paragraph>Uživatel není autorem žádného námětu</Paragraph>
+            }
+            </CardBody>
+            </>
+        );
+    } else {
+        return <Loader />;
+    };  
+}
+
 export const Detail = props => {
     const { id } = useParams();
     const [{accessToken, profile}, dispatch] = useAppContext();
@@ -167,6 +210,10 @@ export const Detail = props => {
                 <Card>
                     <CardHeader><Subheading>Autorství prací</Subheading></CardHeader>
                     <AuthoredWorks id={id} accessToken={accessToken}/>
+                </Card>
+                <Card>
+                    <CardHeader><Subheading>Autorství námětů</Subheading></CardHeader>
+                    <AuthoredIdeas id={id} accessToken={accessToken}/>
                 </Card>
                 {profile && profile[EVALUATOR_ROLE] === "1"
                 ?
