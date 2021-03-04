@@ -3,3 +3,4 @@ export const WorkStates = {0: "Připravovaná", 1: "Běžící", 2: "Nepodařen�
 
 export const ADMIN_ROLE = "theses_admin";
 export const EVALUATOR_ROLE = "theses_evaluator";
+export const MANAGER_ROLE = "theses_manager";

@@ -1,6 +1,7 @@
 import React, {useState, useMemo, useCallback, useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {DataTable, ListColumnFilter, ActionLink} from "../general";
+import {DateTime} from "../common";
 import {useAppContext, SET_TITLE} from "../../providers/ApplicationProvider";
 import axios from "axios";
 import {WorkStates} from "../../configuration/constants";
@@ -12,7 +13,7 @@ const List = props => {
     const [data, setData] = useState([]);
     const [setsData, setSetsData] = useState({});
     const [totalPages, setTotalPages] = useState(0);
-    const [{accessToken, profile}, dispatch] = useAppContext();
+    const [{accessToken}, dispatch] = useAppContext();
 
     useEffect(()=>{ 
       dispatch({type: SET_TITLE, payload: "Seznam prací"}); 
@@ -38,11 +39,12 @@ const List = props => {
         {Header: "Jméno", accessor: "authorFirstName"},
         {Header: "Příjmení", accessor: "authorLastName"},
         {Header: "Třída", accessor: "className"},
-        {Header: "Jméno manažera", accessor: "managerFirstName"},
-        {Header: "Příjmení manažera", accessor: "managerLastName"},
+        {Header: "Jméno vedoucího", accessor: "managerFirstName"},
+        {Header: "Příjmení vedoucího", accessor: "managerLastName"},
         {Header: "Rok", accessor: "year"},
         {Header: "Sada", accessor: "setName", disableSortBy: true, Filter: (column) => {return ListColumnFilter(column, setsData)}},
         {Header: "Stav", accessor: "state", Cell: data => (WorkStates[data.cell.value]), Filter: (column) => {return ListColumnFilter(column, WorkStates)}},
+        {Header: "Aktualizace", accessor: "updated", disableFilters:true, Cell: (data)=>(<DateTime date={data.cell.value} />)},
         {Header: "Akce", Cell: (data)=>(<Link to={"/works/" + data.row.original.id}>Detail</Link>)}
     ],[setsData]);  
 
@@ -66,8 +68,8 @@ const List = props => {
                 case "userId": parameters.push("userId=" + f.value); break;
                 case "authorFirstName": parameters.push("firstname=" + f.value); break;
                 case "authorLastName": parameters.push("lastname=" + f.value); break;
-                case "managerFirstName": parameters.push("firstname=" + f.value); break;
-                case "managerLastName": parameters.push("lastname=" + f.value); break;
+                case "managerFirstName": parameters.push("managerfirstname=" + f.value); break;
+                case "managerLastName": parameters.push("managerlastname=" + f.value); break;
                 case "setName": parameters.push("setId=" + f.value); break;
                 case "state": parameters.push("state=" + f.value); break;
                 case "year": parameters.push("year=" + f.value); break;
@@ -101,7 +103,6 @@ const List = props => {
       <>
       <>
       <ActionLink to="/works/create">Rychlé vytvoření</ActionLink>
-      <ActionLink to="/works/guide">Průvodce vytvořením</ActionLink>
       </>
       <DataTable columns={columns} data={data} fetchData={fetchData} isLoading={isLoading} error={error} totalPages={totalPages} />
       </>
@@ -109,7 +110,3 @@ const List = props => {
 };
 
 export default List;
-
-/*
-      
-*/

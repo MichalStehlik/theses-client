@@ -43,7 +43,7 @@ const Display = props => {
                 <CardTypeValueItem type="Třída" value={props.data.className} />
                 <CardTypeValueItem type="Odkaz na repozitář" value={props.data.repositoryURL ? <a href={props.data.repositoryURL}>{props.data.repositoryURL}</a> : ""} />
                 <CardTypeValueItem type="Autor" value={<LoadedUser id={props.data.authorId} />} />
-                <CardTypeValueItem type="Vedoucí práce nebo oboru" value={<LoadedUser id={props.data.managerId} />} />
+                <CardTypeValueItem type="Odpovědný vedoucí práce" value={<LoadedUser id={props.data.managerId} />} />
                 <CardTypeValueItem type="Stav" value={WorkStates[props.data.state]} />
                 <CardTypeValueItem type="Sada" value={setResponse ? <Link to={"/admin/sets/" + setResponse.id}>{setResponse.name}</Link> : ""} />
                 <CardTypeValueItem type="Rok" value={setResponse ? setResponse.year : ""} />

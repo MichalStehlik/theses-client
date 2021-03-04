@@ -171,7 +171,7 @@ export const Create = props => {
                     <option></option>
                         {Array.isArray(authors) ? authors.map((item,index) => (<option key={index} value={item.id}>{item.name + " (" + item.email + ")"}</option>)) : ""}
                     </FormSelect>
-                    <FormSelect name="managerid" label="Manažer práce" placeholder="xxxxxxxxx">
+                    <FormSelect name="managerid" label="Odpovědný vedoucí práce" placeholder="xxxxxxxxx">
                         <option></option>
                         {Array.isArray(evaluators) ? evaluators.map((item,index) => (<option key={index} value={item.id}>{item.name + " (" + item.email + ")"}</option>)) : ""}
                     </FormSelect>

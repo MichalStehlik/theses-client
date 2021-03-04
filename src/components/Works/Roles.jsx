@@ -272,7 +272,12 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, isEditable, wo
             ?
         <CardBody>
         <Subheading>Přihlášky a hodnocení</Subheading>
-        <CenteredContent>
+        {
+            workData.state === 0
+            ?
+            <Alert variant="info" text="Pro práce ve stavu přípravy nelze vygenerovat přihlášku. Přepněte stav práce alespoň na Běžící." />
+            :
+            <CenteredContent>
             <Button onClick={e => {
                 axios({
                     url: process.env.REACT_APP_API_URL + "/works/" + id + "/application",
@@ -294,8 +299,9 @@ const Roles = ({id, owner, switchMode, editedRole, setEditedRole, isEditable, wo
                   }).catch((error)=>{
                         dispatch({type: ADD_MESSAGE, text: "Při získávání přihlášky došlo k chybě.", variant: "error", dismissible: true, expiration: 3});
                   })
-            }}>Přihláška</Button>
+            }}>Uložit přihlášku</Button>
         </CenteredContent>
+        }
         </CardBody>
         :
         ""

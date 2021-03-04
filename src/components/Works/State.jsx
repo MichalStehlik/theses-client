@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {Button, CardBody, Paragraph, ButtonBlock, Loader, Alert } from "../general";
 import {useAppContext, ADD_MESSAGE} from "../../providers/ApplicationProvider";
 import axios from "axios";
-import {WorkStates, ADMIN_ROLE} from "../../configuration/constants";
+import {WorkStates, ADMIN_ROLE, MANAGER_ROLE} from "../../configuration/constants";
 
 const State = ({id, isEditable, fetchData, data}) => {
     const [{accessToken, profile}, dispatch] = useAppContext();
@@ -49,7 +49,7 @@ const State = ({id, isEditable, fetchData, data}) => {
     return (
         <CardBody>
             <Paragraph>Stav práce je: <b>{WorkStates[data.state]}</b>.</Paragraph>
-            {profile[ADMIN_ROLE] === "1" || (profile.sub === data.managerId)
+            {profile[ADMIN_ROLE] === "1" /*|| (profile.sub === data.managerId)*/ || (profile[MANAGER_ROLE] === "1")
             ?
             Array.isArray(response) && response.length === 0
                 ?

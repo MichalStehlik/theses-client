@@ -85,9 +85,9 @@ export const Detail = props => {
             (profile !== null) && (
                 (
                     profile[ADMIN_ROLE] === "1" 
-                    || (profile.sub === props.userId && props.data.state === 0)
-                    || (profile.sub === props.managerId && props.data.state === 0)
-                    || (profile.sub === props.userId && props.data.state === 0)  
+                    || (profile.sub === response.userId && props.data.state === 0)
+                    || (profile.sub === response.managerId && props.data.state === 0)
+                    || (profile.sub === response.userId && props.data.state === 0)  
                 )
             )
         );
